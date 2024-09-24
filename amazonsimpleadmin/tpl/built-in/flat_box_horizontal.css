@@ -1,0 +1,216 @@
+.asa1_fbh {
+    width: 100%;
+    border: 1px solid #E8E8E8;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    float: left;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    background: #FFFFFF;
+    clear: both;
+    float: none;
+}
+.asa1_fbh p {
+    margin: 0;
+}
+.asa1_fbh::after {
+    content: "";
+    display: table;
+    clear: both;
+    position: absolute;
+    border-radius: 5px;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-in-out;
+}
+
+.asa1_fbh_inner_1 {
+    display: flex;
+}
+
+.asa1_fbh_img {
+    flex: 0 1 auto;
+    text-align: center;
+    padding: 10px;
+}
+
+.asa1_fbh_img a,
+.asa1_fbh_img a:hover,
+.asa1_fbh_img a:focus {
+    text-decoration: none;
+    border: 0;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.asa1_fbh_img img {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.asa1_fbh_body {
+    flex: 1 1 0%;
+    position: relative;
+    padding: 10px 10px 10px 0;
+}
+
+.asa1_fbh_title {
+    font-size: 1em;
+    margin-bottom: 5px;
+    padding: 0 4px;
+}
+
+.asa1_fbh_title,
+.asa1_fbh_title a {}
+
+.asa1_fbh_rating {
+    vertical-align: middle;
+}
+
+.asa1_fbh_price,
+.asa1_fbh_not_available {
+    font-size: 1em;
+    margin-bottom: 6px;
+    color: #990000;
+}
+
+.asa1_fbh_listprice {
+    text-decoration: line-through !important;
+    font-size: 13px!important;
+    color: #555!important;
+}
+
+.asa1_fbh div.asa1_as_of {
+    font-size: 80% !important;
+    display: inline;
+}
+
+.asa1_fbh_button {
+    width: 100%;
+    display: inline-block;
+    color: #fff !important;
+    background-color: #1d68ff;
+    border-radius: 5px;
+    cursor: pointer;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+    text-decoration: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    transition-duration: 0.3s !important;
+    transition: 0.3s !important;
+    max-width: 350px;
+}
+
+.asa1_fbh_button:hover,
+.asa1_fbh_button:focus {
+    background-color: #ff9600;
+    color: #fff !important;
+    text-decoration: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.asa1_fbh_inner_2 {
+    padding: 0 10px;
+}
+
+.asa1_fbh .description {
+    margin-bottom: 10px;
+    font-size: 80%;
+}
+
+.asa1_fbh .description ul {
+    list-style-position: inside;
+}
+
+.asa1_fbh .disclaimer {
+    font-size: 80%;
+    margin-bottom: 10px;
+}
+
+.asa1_fbh .features {
+    margin-bottom: 10px;
+    font-size: 80%;
+}
+
+.asa1_fbh .features ul {
+    list-style-position: inside;
+}
+
+.asa1_fbh_ribbon {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    z-index: 1;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    text-align: right;
+}
+
+.asa1_fbh_ribbon span {
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 25px;
+    transform: rotate(45deg);
+    width: 120px;
+    display: block;
+    background: #ff9600;
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 22px;
+    right: -26px;
+}
+
+.asa1_fbh_ribbon span::before {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 100%;
+    z-index: -1;
+    border-left: 3px solid #ff9600;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #ff9600;
+}
+
+.asa1_fbh_ribbon span::after {
+    content: '';
+    position: absolute;
+    right: 0%;
+    top: 100%;
+    z-index: -1;
+    border-right: 3px solid #ff9600;
+    border-left: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-top: 3px solid #ff9600;
+}
+
+@media (max-width:500px) {
+    .asa1_fbh_inner_1 {
+        flex-direction: column;
+    }
+    .asa1_fbh_body {
+        padding-left: 10px;
+        text-align: center;
+    }
+    .asa1_fbh_title {
+        margin-right: 0 !important;
+    }
+}

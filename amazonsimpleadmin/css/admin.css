@@ -1,0 +1,7 @@
+.selectable {
+    margin: 0;
+    cursor: pointer;
+    padding: 4px;
+    background: #E7E7E7;
+    display: block;
+}

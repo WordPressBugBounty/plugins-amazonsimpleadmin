@@ -1,0 +1,115 @@
+.asa1_fbv {
+    width: 31%;
+    min-width: 200px;
+    border: 1px solid #E8E8E8;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-right: 15px;
+    display: inline-block;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    background: #FFFFFF;
+}
+.asa1_fbv p {
+    margin: 0;
+}
+
+.asa1_fbv:after {
+    content: "";
+    display: table;
+    clear: both;
+    position: absolute;
+    border-radius: 10px;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease-in-out;
+}
+.asa1_fbv_img {
+    width: 100%;
+    text-align: center;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+.asa1_fbv_img a,
+.asa1_fbv_img a:hover,
+.asa1_fbv_img a:focus {
+    text-decoration: none;
+    border: 0;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+.asa1_fbv_img img {
+    max-width: 96% !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+.asa1_fbv_body {
+    width: 100%;
+}
+.asa1_fbv_title {
+    font-size: 1em;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 0 4px;
+}
+.asa1_fbv_title,
+.asa1_fbv_title a {
+    color: #dd0808 !important;
+}
+.asa1_fbv_rating {
+    text-align: center;
+    vertical-align: middle;
+}
+.asa1_fbv_price,
+.asa1_fbv_not_available {
+    font-size: 1em;
+    text-align: center;
+    margin-bottom: 6px;
+    color: #990000;
+}
+.asa1_fbv_button {
+    width: 100%;
+    display: inline-block;
+    color: #fff !important;
+    background-color: #1d68ff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    cursor: pointer;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+    text-decoration: none !important;
+    border: 0 !important;
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    transition-duration: 0.3s !important;
+    transition: 0.3s !important;
+}
+.asa1_fbv_button:hover {
+    background-color: #ff9600;
+    transition-duration: 0.3s !important;
+    color: #fff !important;
+    border: 0 !important;
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+@media only screen and (max-width:500px) {
+    .asa1_fbv:not(.slick-slide) {
+        float: none;
+        width: 99%;
+        margin-right: 0;
+        margin-left: 0;
+    }
+}

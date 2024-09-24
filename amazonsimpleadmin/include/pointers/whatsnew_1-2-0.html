@@ -1,0 +1,54 @@
+<div class="asa-whats-new-item">
+    <h4>New template: flat_box_horizontal</h4>
+    <p>Usage example: [asa tpl="flat_box_horizontal"]ASIN[/asa]<br>Or set it as the new defaut template in the options.</p>
+    <img src="[img_url]/../img/whatsnew/tpl_flat_box_horizontal.png" width="600" height="188">
+</div>
+<div class="asa-whats-new-item">
+    <h4>New template: flat_box_vertical</h4>
+    <p>Usage example: [asa tpl="flat_box_vertical"]ASIN[/asa]</p>
+    <img src="[img_url]/../img/whatsnew/tpl_flat_box_vertical.png" width="210" height="300">
+</div>
+<div class="asa-whats-new-item">
+    <h4>Improved collection rendering</h4>
+    <p>Now you can combine the options "items" and type="random" <br>what had not worked so well in the past. ;-)</p>
+    <p>Example to show <b>one random collection item</b>:</p>
+    <p>[asa_collection tpl="my_template" items=1 type="random"]my_collection[/asa_collection]</p>
+</div>
+<div class="asa-whats-new-item">
+    <h4>Follow ASA on Facebook</h4>
+    <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fwpasa2%2F&width=400&layout=standard&action=like&size=large&show_faces=true&share=false&height=80&appId" width="400" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    <h4 style="margin-top: 0">and Twitter</h4>
+    <a href="https://twitter.com/ifeelwebde" class="twitter-follow-button" data-show-count="false">Follow @ifeelwebde</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <p>&nbsp;</p>
+</div>
+
+<div class="asa-whats-new-nav">
+    <a href="#" class="button" id="asa-whats-new-nav-prev">Previous</a>
+    <a href="#" class="button" id="asa-whats-new-next">Next</a>
+</div>
+
+<script>
+    console.log('pointer loaded');
+    jQuery('.asa-whats-new-item:not(:first)').hide();
+    jQuery('#asa-whats-new-nav-prev').hide();
+    jQuery('#asa-whats-new-next, #asa-whats-new-nav-prev').click(function(e) {
+        e.preventDefault();
+        var currentIdx = parseInt(jQuery('.asa-whats-new-item:visible').index('.asa-whats-new-item'), 10);
+        var nextIdx = (jQuery(e.target).is('#asa-whats-new-next')) ? currentIdx + 1 : currentIdx - 1;
+
+        if ((nextIdx + 1) == jQuery('.asa-whats-new-item').length) {
+            jQuery('#asa-whats-new-next').hide();
+        } else {
+            jQuery('#asa-whats-new-next').show();
+        }
+
+        if (nextIdx == 0) {
+            jQuery('#asa-whats-new-nav-prev').hide();
+        } else {
+            jQuery('#asa-whats-new-nav-prev').show();
+        }
+
+        jQuery('.asa-whats-new-item:eq(' + currentIdx + ')').hide();
+        jQuery('.asa-whats-new-item:eq(' + nextIdx + ')').show();
+    });
+</script>
