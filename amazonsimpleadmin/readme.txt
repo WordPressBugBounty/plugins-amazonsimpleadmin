@@ -2,9 +2,9 @@
 Tags: amazon, affiliate, monetize, commission, marketing
 Contributors: worschtebrot
 Requires at least: 2.1
-Requires PHP: 7.2
-Tested up to: 6.6.1
-Stable tag: 1.5.4
+Requires PHP: 7.4
+Tested up to: 6.8.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,9 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.6.0 =
+* Added: Compatibility check with WordPress 6.8
 
 = 1.5.4 =
 * Fixed: Security issue with option "Parse comments". Now only [asa] shortcodes will be parsed in comments

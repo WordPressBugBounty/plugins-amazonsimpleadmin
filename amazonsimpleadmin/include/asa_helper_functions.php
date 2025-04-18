@@ -31,7 +31,7 @@ if (!function_exists('asa_get_feed_items')) {
      */
     function asa_get_feed_items()
     {
-        $rss = fetch_feed('http://www.wp-amazon-plugin.com/feed/');
+        $rss = fetch_feed('https://getasa2.com/feed/');
         $result = array();
 
         if ($rss instanceof SimplePie) {
