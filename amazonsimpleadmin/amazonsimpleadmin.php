@@ -3,9 +3,11 @@
 Plugin Name: Affiliate Simple Assistent (ASA1)
 Plugin URI: http://www.wp-amazon-plugin.com/
 Description: Lets you easily <strong>embed Amazon products</strong> into your WordPress posts by use of <strong>[asa]ASIN[/asa]</strong> shortcode. Supports the use of custom templates. You can choose from various presentation styles and of course create your own template in a few seconds.
-Version: 1.6.0
+Version: 1.7.0
 Author: Timo Reith
 Author URI: http://www.ifeelweb.de/
+Requires PHP: 7.4
+Tested up to: 6.8.2
 */
 
 /*  Copyright 2007-2013  Timo Reith (email : support@wp-amazon-plugin.com)

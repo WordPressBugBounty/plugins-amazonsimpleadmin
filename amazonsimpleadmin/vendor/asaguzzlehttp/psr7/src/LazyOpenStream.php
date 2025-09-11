@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Lazily reads or writes to a file that is opened only after an IO operation

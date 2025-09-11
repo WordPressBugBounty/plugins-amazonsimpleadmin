@@ -2,7 +2,7 @@
 namespace AsaGuzzleHttp;
 
 use AsaGuzzleHttp\Promise\PromisorInterface;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 use AsaGuzzleHttp\Promise\EachPromise;
 
 /**

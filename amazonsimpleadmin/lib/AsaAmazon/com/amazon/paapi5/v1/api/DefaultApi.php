@@ -47,6 +47,11 @@ class DefaultApi
     protected $config;
 
     /**
+     * @var HeaderSelector
+     */
+    protected $headerSelector;
+
+    /**
      * @param ClientInterface $client
      * @param Configuration   $config
      * @param HeaderSelector  $selector
@@ -54,7 +59,7 @@ class DefaultApi
     public function __construct(
         ClientInterface $client,
         Configuration $config,
-        HeaderSelector $selector = null
+        ?HeaderSelector $selector = null
     ) {
         $this->client = $client;
         $this->config = $config;

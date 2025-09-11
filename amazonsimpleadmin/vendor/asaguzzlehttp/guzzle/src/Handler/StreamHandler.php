@@ -7,9 +7,9 @@ use AsaGuzzleHttp\Promise\FulfilledPromise;
 use AsaGuzzleHttp\Promise\PromiseInterface;
 use AsaGuzzleHttp\Psr7;
 use AsaGuzzleHttp\TransferStats;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * HTTP handler that uses PHP's HTTP stream wrapper.
@@ -75,7 +75,7 @@ class StreamHandler
         array $options,
         RequestInterface $request,
         $startTime,
-        ResponseInterface $response = null,
+        ?ResponseInterface $response = null,
         $error = null
     ) {
         if (isset($options['on_stats'])) {

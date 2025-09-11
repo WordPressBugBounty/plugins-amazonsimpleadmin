@@ -5,9 +5,9 @@ use AsaGuzzleHttp\Exception\BadResponseException;
 use AsaGuzzleHttp\Exception\TooManyRedirectsException;
 use AsaGuzzleHttp\Promise\PromiseInterface;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Request redirect middleware.

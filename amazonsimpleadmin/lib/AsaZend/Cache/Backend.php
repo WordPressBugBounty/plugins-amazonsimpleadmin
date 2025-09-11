@@ -79,7 +79,6 @@ class AsaZend_Cache_Backend
     {
         if (!is_array($directives)) AsaZend_Cache::throwException('Directives parameter must be an array');
         foreach ($directives as $name => $value) {
-        //while (list($name, $value) = each($directives)) {
             if (!is_string($name)) {
                 AsaZend_Cache::throwException("Incorrect option name : $name");
             }

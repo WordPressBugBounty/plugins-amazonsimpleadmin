@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Resolves a URI reference in the context of a base URI and the opposite way.

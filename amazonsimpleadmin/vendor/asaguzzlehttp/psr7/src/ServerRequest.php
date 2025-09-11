@@ -3,10 +3,10 @@
 namespace AsaGuzzleHttp\Psr7;
 
 use InvalidArgumentException;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
+use AsaPsr\Http\Message\ServerRequestInterface;
+use AsaPsr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\UploadedFileInterface;
 
 /**
  * Server-side HTTP request

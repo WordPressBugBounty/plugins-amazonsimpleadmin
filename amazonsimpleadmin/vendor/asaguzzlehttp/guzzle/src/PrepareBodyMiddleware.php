@@ -3,7 +3,7 @@ namespace AsaGuzzleHttp;
 
 use AsaGuzzleHttp\Promise\PromiseInterface;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * Prepares requests that contain a body, adding the Content-Length,

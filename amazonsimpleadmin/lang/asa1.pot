@@ -49,6 +49,10 @@ msgstr ""
 msgid "FAQ"
 msgstr ""
 
+#: AsaCore.php:713
+msgid "Templates"
+msgstr ""
+
 #: AsaCore.php:710 AsaCore.php:1563
 msgid "Test"
 msgstr ""
@@ -1134,4 +1138,48 @@ msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://www.ifeelweb.de/"
+msgstr ""
+
+#: AsaCore.php:1743
+msgid "Here you can browse all available templates and see how to use them in your shortcodes."
+msgstr ""
+
+#: AsaCore.php:1745
+msgid "Available Templates"
+msgstr ""
+
+#: AsaCore.php:1748
+msgid "All"
+msgstr ""
+
+#: AsaCore.php:1749
+msgid "Built-in"
+msgstr ""
+
+#: AsaCore.php:1750
+msgid "Custom"
+msgstr ""
+
+#: AsaCore.php:1753
+msgid "ASA found the following template files on your server:"
+msgstr ""
+
+#: AsaCore.php:1775
+msgid "Single product usage:"
+msgstr ""
+
+#: AsaCore.php:1783
+msgid "Collection usage:"
+msgstr ""
+
+#: AsaCore.php:1789
+msgid "Copy to clipboard"
+msgstr ""
+
+#: AsaCore.php:1793
+msgid "Location:"
+msgstr ""
+
+#: AsaCore.php:1803
+msgid "No templates found."
 msgstr ""

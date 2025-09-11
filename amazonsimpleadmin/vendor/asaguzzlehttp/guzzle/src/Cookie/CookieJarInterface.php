@@ -1,8 +1,8 @@
 <?php
 namespace AsaGuzzleHttp\Cookie;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
 
 /**
  * Stores HTTP cookies.

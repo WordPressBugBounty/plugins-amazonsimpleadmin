@@ -5,7 +5,7 @@ use AsaGuzzleHttp\Cookie\CookieJarInterface;
 use AsaGuzzleHttp\Exception\RequestException;
 use AsaGuzzleHttp\Promise\RejectedPromise;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -123,7 +123,7 @@ final class Middleware
      *
      * @return callable Returns a function that accepts the next handler.
      */
-    public static function tap(callable $before = null, callable $after = null)
+    public static function tap(?callable $before = null, ?callable $after = null)
     {
         return function (callable $handler) use ($before, $after) {
             return function ($request, array $options) use ($handler, $before, $after) {
@@ -166,7 +166,7 @@ final class Middleware
      *
      * @return callable Returns a function that accepts the next handler.
      */
-    public static function retry(callable $decider, callable $delay = null)
+    public static function retry(callable $decider, ?callable $delay = null)
     {
         return function (callable $handler) use ($decider, $delay) {
             return new RetryMiddleware($decider, $handler, $delay);

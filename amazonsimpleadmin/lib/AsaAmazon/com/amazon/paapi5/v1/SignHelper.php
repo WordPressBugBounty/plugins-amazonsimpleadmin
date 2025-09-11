@@ -40,6 +40,7 @@ namespace AsaAmazon\ProductAdvertisingAPI\v1\com\amazon\paapi5\v1;
  */
 class SignHelper
 {
+    private $config = null;
 
     private $host = null;
     private $accessKey = null;

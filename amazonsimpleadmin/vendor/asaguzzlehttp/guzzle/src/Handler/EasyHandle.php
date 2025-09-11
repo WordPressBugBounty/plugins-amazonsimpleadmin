@@ -2,9 +2,9 @@
 namespace AsaGuzzleHttp\Handler;
 
 use AsaGuzzleHttp\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Represents a cURL easy handle and the data it populates.

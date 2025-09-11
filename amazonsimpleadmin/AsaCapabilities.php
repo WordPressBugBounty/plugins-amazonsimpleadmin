@@ -6,7 +6,7 @@
  *
  *
  * @author   Timo Reith <timo@ifeelweb.de>
- * @version  $Id: AsaCapabilities.php 3276515 2025-04-18 10:06:51Z worschtebrot $
+ * @version  $Id: AsaCapabilities.php 1837693 2018-03-10 17:49:59Z worschtebrot $
  */
 class AsaCapabilities
 {

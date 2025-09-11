@@ -8,7 +8,7 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.6.0';
+    const VERSION = '1.7.0';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
 
@@ -710,6 +710,7 @@ class AmazonSimpleAdmin {
             $nav .= sprintf($navItemFormat, $this->plugin_url . '&task=cache', (($task == 'cache') ? 'nav-tab-active' : ''), __('Cache', 'asa1'));
         }
         $nav .= sprintf($navItemFormat, $this->plugin_url.'&task=usage', (($task == 'usage') ? 'nav-tab-active' : ''), __('Usage', 'asa1'));
+        $nav .= sprintf($navItemFormat, $this->plugin_url.'&task=templates', (($task == 'templates') ? 'nav-tab-active' : ''), __('Templates', 'asa1'));
         $nav .= sprintf($navItemFormat, $this->plugin_url.'&task=faq', (($task == 'faq') ? 'nav-tab-active' : ''), __('FAQ', 'asa1'));
         $nav .= sprintf($navItemFormat, $this->plugin_url.'&task=test', (($task == 'test') ? 'nav-tab-active' : ''), __('Test', 'asa1'));
         if ($this->isErrorHandling()) {
@@ -1094,6 +1095,13 @@ class AmazonSimpleAdmin {
                 echo $this->_getSubMenu($task);
 
                 $this->_displayCreditsPage();
+                break;
+                
+            case 'templates':
+
+                echo $this->_getSubMenu($task);
+
+                $this->_displayTemplates();
                 break;
                 
             case 'cache':
@@ -1718,6 +1726,161 @@ class AmazonSimpleAdmin {
         <?php
     }
 
+    protected function _displayTemplates()
+    {
+        $templates = $this->getAllTemplatesWithPaths();
+        
+        ?>
+        <div id="templates_wrap">
+            <h2><?php _e('Templates', 'asa1') ?></h2>
+
+            <div class="asa_columns clearfix">
+                <div class="asa_content">
+                    <p><span class="dashicons dashicons-editor-help"></span> <?php _e('Here you can browse all available templates and see how to use them in your shortcodes.', 'asa1'); ?></p>
+
+                    <h3><?php _e('Available Templates', 'asa1'); ?></h3>
+                    
+                    <div class="asa-template-filters">
+                        <button class="asa-filter-btn active" data-filter="all"><?php _e('All', 'asa1'); ?> (<span id="count-all">0</span>)</button>
+                        <button class="asa-filter-btn" data-filter="builtin"><?php _e('Built-in', 'asa1'); ?> (<span id="count-builtin">0</span>)</button>
+                        <button class="asa-filter-btn" data-filter="custom"><?php _e('Custom', 'asa1'); ?> (<span id="count-custom">0</span>)</button>
+                    </div>
+                    
+                    <p><?php _e('ASA found the following template files on your server:', 'asa1') ?></p>
+                    
+                    <?php if (count($templates) > 0): ?>
+                        <div class="asa-templates-grid">
+                            <?php foreach ($templates as $template): ?>
+                                <div class="asa-template-card" data-type="<?php echo $template['is_builtin'] ? 'builtin' : 'custom'; ?>">
+                                    <div class="asa-template-header">
+                                        <h4><?php echo esc_html($template['name']); ?></h4>
+                                        <span class="asa-template-type <?php echo $template['is_builtin'] ? 'builtin' : 'custom'; ?>">
+                                            <?php echo $template['is_builtin'] ? __('Built-in', 'asa1') : __('Custom', 'asa1'); ?>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="asa-template-usage">
+                                        <p><strong><?php _e('Single product usage:', 'asa1'); ?></strong></p>
+                                        <div class="asa-code-block">
+                                            <div class="asa-code-scroll">
+                                                <code>[asa tpl="<?php echo esc_attr($template['name']); ?>"]ASIN[/asa]</code>
+                                            </div>
+                                            <button class="asa-copy-btn" onclick="asaCopyToClipboard('[asa tpl=&quot;<?php echo esc_js($template['name']); ?>&quot;]ASIN[/asa]')" title="<?php _e('Copy to clipboard', 'asa1'); ?>">
+                                                <span class="dashicons dashicons-admin-page"></span>
+                                            </button>
+                                        </div>
+                                        
+                                        <p><strong><?php _e('Collection usage:', 'asa1'); ?></strong></p>
+                                        <div class="asa-code-block">
+                                            <div class="asa-code-scroll">
+                                                <code>[asa_collection tpl="<?php echo esc_attr($template['name']); ?>"]collection_name[/asa_collection]</code>
+                                            </div>
+                                            <button class="asa-copy-btn" onclick="asaCopyToClipboard('[asa_collection tpl=&quot;<?php echo esc_js($template['name']); ?>&quot;]collection_name[/asa_collection]')" title="<?php _e('Copy to clipboard', 'asa1'); ?>">
+                                                <span class="dashicons dashicons-admin-page"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="asa-template-location">
+                                        <small><?php _e('Location:', 'asa1'); ?> <?php echo esc_html(str_replace(dirname(__FILE__) . DIRECTORY_SEPARATOR, '', $template['path'])); ?></small>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <div class="asa-template-info">
+                            <h3><?php _e('Template Information', 'asa1'); ?></h3>
+                            <ul>
+                                <li><strong><?php _e('Custom Templates:', 'asa1'); ?></strong> <?php _e('Place custom templates in your theme folder under /asa/ or in the plugin\'s tpl/ folder.', 'asa1'); ?></li>
+                                <li><strong><?php _e('Update Safety:', 'asa1'); ?></strong> <?php printf(__('Read about <a href="%s" target="_blank">keeping your custom templates update safe</a>.', 'asa1'), 'https://www.wp-amazon-plugin.com/2015/13280/keeping-your-custom-templates-update-safe/'); ?></li>
+                                <li><strong><?php _e('Built-in Templates:', 'asa1'); ?></strong> <?php _e('These are provided by the plugin and will be updated with plugin updates.', 'asa1'); ?></li>
+                            </ul>
+                        </div>
+                        
+                    <?php else: ?>
+                        <div class="notice notice-warning">
+                            <p><?php _e('No templates found. Please check your installation.', 'asa1'); ?></p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="asa_sidebar">
+                    <?php $this->_displaySidebar(); ?>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        function asaCopyToClipboard(text) {
+            // Create a temporary textarea element
+            var textArea = document.createElement("textarea");
+            textArea.value = text.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+            document.body.appendChild(textArea);
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                document.execCommand('copy');
+                // Show feedback
+                var button = event.target.closest('.asa-copy-btn');
+                var originalIcon = button.innerHTML;
+                button.innerHTML = '<span class="dashicons dashicons-yes"></span>';
+                button.style.color = '#46b450';
+                
+                setTimeout(function() {
+                    button.innerHTML = originalIcon;
+                    button.style.color = '';
+                }, 1500);
+            } catch (err) {
+                console.error('Could not copy text: ', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Template filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            var filterButtons = document.querySelectorAll('.asa-filter-btn');
+            var templateCards = document.querySelectorAll('.asa-template-card');
+            
+            // Count templates by type
+            var counts = {all: 0, builtin: 0, custom: 0};
+            templateCards.forEach(function(card) {
+                var type = card.getAttribute('data-type');
+                counts.all++;
+                counts[type]++;
+            });
+            
+            // Update count displays
+            document.getElementById('count-all').textContent = counts.all;
+            document.getElementById('count-builtin').textContent = counts.builtin;
+            document.getElementById('count-custom').textContent = counts.custom;
+            
+            // Add click handlers to filter buttons
+            filterButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var filterType = this.getAttribute('data-filter');
+                    
+                    // Update active button
+                    filterButtons.forEach(function(btn) {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Filter template cards
+                    templateCards.forEach(function(card) {
+                        if (filterType === 'all' || card.getAttribute('data-type') === filterType) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+        </script>
+        <?php
+    }
+
     
     /**
      * Load options panel
@@ -2014,7 +2177,7 @@ class AmazonSimpleAdmin {
                 <p><span class="dashicons dashicons-twitter"></span> <a href="https://twitter.com/ifeelwebde" target="_blank">Timo on Twitter</a></p>
                 <p><span class="dashicons dashicons-video-alt3"></span> <a href="https://www.youtube.com/channel/UCjOu3RexM9F4ZEGvWCYMPRg" target="_blank">ASA1 YouTube Channel</a></p>
                 <p><span class="dashicons dashicons-video-alt3"></span> <a href="https://www.youtube.com/channel/UCi67kdl2D4hVFNndVEl0uAw" target="_blank">ASA2 YouTube Channel</a></p>
-                <p><span class="dashicons dashicons-admin-site"></span> <a href="https://www.wp-amazon-plugin.com/blog/" target="_blank">ASA News</a></p>
+                <p><span class="dashicons dashicons-admin-site"></span> <a href="https://www.getasa2.com/blog/" target="_blank">ASA News</a></p>
                 <p><span class="dashicons dashicons-format-chat"></span> <a href="https://www.wp-amazon-plugin.com/contact/" target="_blank"><?php _e('Contact', 'asa'); ?></a></p>
             </div>
         </div>
@@ -2152,6 +2315,34 @@ class AmazonSimpleAdmin {
 
                 <div class="asa_widget" id="asa_widget_setup">
                     <h3><?php _e('API Setup', 'asa1') ?></h3>
+
+                    <?php
+                    // PHP Version Check
+                    $current_php = PHP_VERSION;
+                    $recommended_php = '8.3';
+                    if (version_compare($current_php, $recommended_php, '<')) {
+                        echo '<div class="notice notice-warning" style="margin: 0 0 15px 0; padding: 10px;">';
+                        echo '<p><strong>'. __('PHP Version', 'asa1') .':</strong> ';
+                        echo sprintf(
+                            __('You are using PHP version %s. WordPress recommends PHP %s or higher for optimal performance, security, and compatibility.', 'asa1'),
+                            $current_php,
+                            $recommended_php
+                        );
+                        echo ' ';
+                        echo sprintf(
+                            __('Please contact your hosting provider to upgrade to PHP %s or higher.', 'asa1'),
+                            $recommended_php
+                        );
+                        echo ' ';
+                        echo __('While ASA1 currently works with older PHP versions, support for outdated versions will be discontinued in future releases.', 'asa1');
+                        echo ' ';
+                        echo sprintf(
+                            __('<a href="%s" target="_blank">Learn more about WordPress requirements</a>.', 'asa1'),
+                            'https://wordpress.org/about/requirements/'
+                        );
+                        echo '</p></div>';
+                    }
+                    ?>
 
                     <div class="asa_widget_inner">
                         <?php
@@ -2468,6 +2659,55 @@ class AmazonSimpleAdmin {
 
         $availableTemplates = array_unique($availableTemplates);
         sort($availableTemplates);
+
+        return $availableTemplates;
+    }
+
+    public function getAllTemplatesWithPaths()
+    {
+        $availableTemplates = array();
+
+        foreach($this->getTplLocations() as $loc) {
+
+            if (!is_dir($loc)) {
+                continue;
+            }
+            $dirIt = new DirectoryIterator($loc);
+
+            foreach ($dirIt as $fileinfo) {
+
+                $filename = $fileinfo->getFilename();
+
+                if ($fileinfo->isDir() || $fileinfo->isDot()) {
+                    continue;
+                }
+
+                $filePathinfo = pathinfo($filename);
+
+                if (!in_array($filePathinfo['extension'], $this->getTplExtensions())) {
+                    continue;
+                }
+
+                $templateName = $filePathinfo['filename'];
+                
+                // Exclude demo and error templates from display
+                $excludedTemplates = array('demo', 'error', 'error_admin');
+                if (in_array($templateName, $excludedTemplates)) {
+                    continue;
+                }
+                
+                if (!isset($availableTemplates[$templateName])) {
+                    $availableTemplates[$templateName] = array(
+                        'name' => $templateName,
+                        'path' => $loc . $filename,
+                        'location' => $loc,
+                        'is_builtin' => (strpos($loc, 'built-in') !== false)
+                    );
+                }
+            }
+        }
+
+        ksort($availableTemplates);
 
         return $availableTemplates;
     }

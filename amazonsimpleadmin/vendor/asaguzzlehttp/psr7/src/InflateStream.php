@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Uses PHP's zlib.inflate filter to inflate deflate or gzipped content.

@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Handler;
 
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 interface CurlFactoryInterface
 {

@@ -1,12 +1,12 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\MessageInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\ServerRequestInterface;
+use AsaPsr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Returns the string representation of an HTTP message.
@@ -42,7 +42,7 @@ function str(MessageInterface $message)
 /**
  * Returns a UriInterface for the given value.
  *
- * This function accepts a string or {@see Psr\Http\Message\UriInterface} and
+ * This function accepts a string or {@see AsaPsr\Http\Message\UriInterface} and
  * returns a UriInterface for the given value. If the value is already a
  * `UriInterface`, it is returned as-is.
  *

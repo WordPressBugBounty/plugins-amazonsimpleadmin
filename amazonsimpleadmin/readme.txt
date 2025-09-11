@@ -3,8 +3,8 @@ Tags: amazon, affiliate, monetize, commission, marketing
 Contributors: worschtebrot
 Requires at least: 2.1
 Requires PHP: 7.4
-Tested up to: 6.8.0
-Stable tag: 1.6.0
+Tested up to: 6.8.2
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,11 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.7.0 =
+* Added: Template section in admin menu to show all available built-in and custom template with example shortcodes
+* Added: A note in the setup section if you are not using a PHP version recommended by WordPress
+* Fixed: Support for PHP 8.4 has been improved
 
 = 1.6.0 =
 * Added: Compatibility check with WordPress 6.8

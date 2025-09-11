@@ -129,7 +129,7 @@ class AsaZend_Rest_Client extends AsaZend_Service_Abstract
      * @throws AsaZend_Http_Client_Exception
      * @return AsaZend_Http_Response
      */
-    final public function restGet($path, array $query = null)
+    final public function restGet($path, ?array $query = null)
     {
         $this->_prepareRest($path);
         $client = self::getHttpClient();

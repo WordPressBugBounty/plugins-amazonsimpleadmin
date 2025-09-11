@@ -1,9 +1,9 @@
 <?php
 namespace AsaGuzzleHttp;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Represents data at the point after it was transferred either successfully

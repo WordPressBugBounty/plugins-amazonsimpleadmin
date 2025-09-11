@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Exception;
 
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * Exception thrown when a connection cannot be established.

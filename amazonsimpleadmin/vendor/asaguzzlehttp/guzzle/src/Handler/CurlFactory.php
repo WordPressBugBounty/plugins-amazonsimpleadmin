@@ -7,7 +7,7 @@ use AsaGuzzleHttp\Promise\FulfilledPromise;
 use AsaGuzzleHttp\Psr7;
 use AsaGuzzleHttp\Psr7\LazyOpenStream;
 use AsaGuzzleHttp\TransferStats;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * Creates curl resources from a request

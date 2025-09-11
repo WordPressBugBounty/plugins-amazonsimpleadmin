@@ -2,7 +2,7 @@
 namespace AsaGuzzleHttp\Handler;
 
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * HTTP handler that uses cURL easy handles as a transport layer.

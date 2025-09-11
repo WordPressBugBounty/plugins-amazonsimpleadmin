@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Reads from multiple streams, one after the other.

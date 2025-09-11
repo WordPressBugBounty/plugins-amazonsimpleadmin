@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Stream that when read returns bytes for a streaming multipart or

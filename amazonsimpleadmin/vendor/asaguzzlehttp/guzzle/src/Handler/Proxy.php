@@ -2,7 +2,7 @@
 namespace AsaGuzzleHttp\Handler;
 
 use AsaGuzzleHttp\RequestOptions;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * Provides basic proxies for handlers.

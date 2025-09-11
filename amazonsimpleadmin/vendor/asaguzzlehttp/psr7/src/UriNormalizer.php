@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Provides methods to normalize and compare URIs.

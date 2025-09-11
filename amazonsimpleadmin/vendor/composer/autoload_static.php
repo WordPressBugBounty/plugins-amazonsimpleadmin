@@ -16,7 +16,7 @@ class ComposerStaticInit51a52bd1e916269a2e88f9973b7a4ab8asa1
     public static $prefixLengthsPsr4 = array (
         'P' => 
         array (
-            'Psr\\Http\\Message\\' => 17,
+            'AsaPsr\\Http\\Message\\' => 20,
         ),
         'A' =>
         array (
@@ -28,7 +28,7 @@ class ComposerStaticInit51a52bd1e916269a2e88f9973b7a4ab8asa1
     );
 
     public static $prefixDirsPsr4 = array (
-        'Psr\\Http\\Message\\' => 
+        'AsaPsr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
@@ -215,13 +215,13 @@ class ComposerStaticInit51a52bd1e916269a2e88f9973b7a4ab8asa1
         'AsaGuzzleHttp\\RetryMiddleware' => __DIR__ . '/..' . '/asaguzzlehttp/guzzle/src/RetryMiddleware.php',
         'AsaGuzzleHttp\\TransferStats' => __DIR__ . '/..' . '/asaguzzlehttp/guzzle/src/TransferStats.php',
         'AsaGuzzleHttp\\UriTemplate' => __DIR__ . '/..' . '/asaguzzlehttp/guzzle/src/UriTemplate.php',
-        'Psr\\Http\\Message\\MessageInterface' => __DIR__ . '/..' . '/psr/http-message/src/MessageInterface.php',
-        'Psr\\Http\\Message\\RequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/RequestInterface.php',
-        'Psr\\Http\\Message\\ResponseInterface' => __DIR__ . '/..' . '/psr/http-message/src/ResponseInterface.php',
-        'Psr\\Http\\Message\\ServerRequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/ServerRequestInterface.php',
-        'Psr\\Http\\Message\\StreamInterface' => __DIR__ . '/..' . '/psr/http-message/src/StreamInterface.php',
-        'Psr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/..' . '/psr/http-message/src/UploadedFileInterface.php',
-        'Psr\\Http\\Message\\UriInterface' => __DIR__ . '/..' . '/psr/http-message/src/UriInterface.php',
+        'AsaPsr\\Http\\Message\\MessageInterface' => __DIR__ . '/..' . '/psr/http-message/src/MessageInterface.php',
+        'AsaPsr\\Http\\Message\\RequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/RequestInterface.php',
+        'AsaPsr\\Http\\Message\\ResponseInterface' => __DIR__ . '/..' . '/psr/http-message/src/ResponseInterface.php',
+        'AsaPsr\\Http\\Message\\ServerRequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/ServerRequestInterface.php',
+        'AsaPsr\\Http\\Message\\StreamInterface' => __DIR__ . '/..' . '/psr/http-message/src/StreamInterface.php',
+        'AsaPsr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/..' . '/psr/http-message/src/UploadedFileInterface.php',
+        'AsaPsr\\Http\\Message\\UriInterface' => __DIR__ . '/..' . '/psr/http-message/src/UriInterface.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

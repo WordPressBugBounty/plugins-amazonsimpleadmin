@@ -1,10 +1,10 @@
 <?php
 namespace AsaGuzzleHttp\Exception;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
 use AsaGuzzleHttp\Promise\PromiseInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * HTTP Request exception

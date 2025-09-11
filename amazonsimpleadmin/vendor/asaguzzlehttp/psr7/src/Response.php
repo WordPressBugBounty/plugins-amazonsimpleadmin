@@ -1,8 +1,8 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * PSR-7 response implementation.

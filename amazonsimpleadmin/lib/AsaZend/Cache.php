@@ -202,7 +202,7 @@ abstract class AsaZend_Cache
      * @param  string $msg  Message for the exception
      * @throws AsaZend_Cache_Exception
      */
-    public static function throwException($msg, Exception $e = null)
+    public static function throwException($msg, ?Exception $e = null)
     {
         // For perfs reasons, we use this dynamic inclusion
         require_once ASA_LIB_DIR . 'AsaZend/Cache/Exception.php';

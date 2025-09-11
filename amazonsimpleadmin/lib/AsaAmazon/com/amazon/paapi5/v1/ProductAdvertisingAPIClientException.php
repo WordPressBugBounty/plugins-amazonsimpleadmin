@@ -160,7 +160,7 @@ class ProductAdvertisingAPIClientException implements ModelInterface, ArrayAcces
      * @param mixed[] $data Associated array of property values
      *                      initializing the model
      */
-    public function __construct(array $data = null)
+    public function __construct(?array $data = null)
     {
         $this->container['errors'] = isset($data['errors']) ? $data['errors'] : null;
     }
@@ -220,6 +220,7 @@ class ProductAdvertisingAPIClientException implements ModelInterface, ArrayAcces
      *
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->container[$offset]);
@@ -232,6 +233,7 @@ class ProductAdvertisingAPIClientException implements ModelInterface, ArrayAcces
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->container[$offset]) ? $this->container[$offset] : null;
@@ -245,6 +247,7 @@ class ProductAdvertisingAPIClientException implements ModelInterface, ArrayAcces
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -261,6 +264,7 @@ class ProductAdvertisingAPIClientException implements ModelInterface, ArrayAcces
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->container[$offset]);

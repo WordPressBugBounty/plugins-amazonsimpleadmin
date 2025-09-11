@@ -3,9 +3,9 @@ namespace AsaGuzzleHttp;
 
 use AsaGuzzleHttp\Promise\PromiseInterface;
 use AsaGuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * Client interface for sending HTTP requests.

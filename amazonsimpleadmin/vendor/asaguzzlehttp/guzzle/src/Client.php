@@ -4,9 +4,9 @@ namespace AsaGuzzleHttp;
 use AsaGuzzleHttp\Cookie\CookieJar;
 use AsaGuzzleHttp\Promise;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\UriInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
 
 /**
  * @method ResponseInterface get(string|UriInterface $uri, array $options = [])
@@ -43,10 +43,10 @@ class Client implements ClientInterface
      * Client configuration settings include the following options:
      *
      * - handler: (callable) Function that transfers HTTP requests over the
-     *   wire. The function is called with a Psr7\Http\Message\RequestInterface
+     *   wire. The function is called with a AsaPsr\Http\Message\RequestInterface
      *   and array of transfer options, and must return a
      *   AsaGuzzleHttp\Promise\PromiseInterface that is fulfilled with a
-     *   Psr7\Http\Message\ResponseInterface on success. "handler" is a
+     *   AsaPsr\Http\Message\ResponseInterface on success. "handler" is a
      *   constructor only option that cannot be overridden in per/request
      *   options. If no handler is provided, a default handler will be created
      *   that enables all of the request options below by attaching all of the

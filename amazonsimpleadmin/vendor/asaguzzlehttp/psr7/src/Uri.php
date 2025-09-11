@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Psr7;
 
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * PSR-7 URI implementation.
@@ -89,7 +89,7 @@ class Uri implements UriInterface
      * Composes a URI reference string from its various components.
      *
      * Usually this method does not need to be called manually but instead is used indirectly via
-     * `Psr\Http\Message\UriInterface::__toString`.
+     * `AsaPsr\Http\Message\UriInterface::__toString`.
      *
      * PSR-7 UriInterface treats an empty component the same as a missing component as
      * getQuery(), getFragment() etc. always return a string. This explains the slight
@@ -140,7 +140,7 @@ class Uri implements UriInterface
     /**
      * Whether the URI has the default port of the current scheme.
      *
-     * `Psr\Http\Message\UriInterface::getPort` may return null or the standard port. This method can be used
+     * `AsaPsr\Http\Message\UriInterface::getPort` may return null or the standard port. This method can be used
      * independently of the implementation.
      *
      * @param UriInterface $uri
@@ -239,7 +239,7 @@ class Uri implements UriInterface
      * @return bool
      * @link https://tools.ietf.org/html/rfc3986#section-4.4
      */
-    public static function isSameDocumentReference(UriInterface $uri, UriInterface $base = null)
+    public static function isSameDocumentReference(UriInterface $uri, ?UriInterface $base = null)
     {
         if ($base !== null) {
             $uri = UriResolver::resolve($base, $uri);

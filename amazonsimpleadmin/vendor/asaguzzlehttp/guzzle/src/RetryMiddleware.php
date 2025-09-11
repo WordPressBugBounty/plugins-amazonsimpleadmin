@@ -4,8 +4,8 @@ namespace AsaGuzzleHttp;
 use AsaGuzzleHttp\Promise\PromiseInterface;
 use AsaGuzzleHttp\Promise\RejectedPromise;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\ResponseInterface;
 
 /**
  * Middleware that retries requests based on the boolean result of

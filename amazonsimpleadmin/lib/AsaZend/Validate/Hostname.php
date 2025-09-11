@@ -406,7 +406,7 @@ class AsaZend_Validate_Hostname extends AsaZend_Validate_Abstract
      * @param AsaZend_Validate_Ip $ipValidator OPTIONAL
      * @return void;
      */
-    public function setIpValidator(AsaZend_Validate_Ip $ipValidator = null)
+    public function setIpValidator(?AsaZend_Validate_Ip $ipValidator = null)
     {
         if ($ipValidator === null) {
             $ipValidator = new AsaZend_Validate_Ip();

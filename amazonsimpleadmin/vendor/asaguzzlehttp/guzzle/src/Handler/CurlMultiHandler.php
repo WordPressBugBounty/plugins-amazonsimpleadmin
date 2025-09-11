@@ -4,7 +4,7 @@ namespace AsaGuzzleHttp\Handler;
 use AsaGuzzleHttp\Promise as P;
 use AsaGuzzleHttp\Promise\Promise;
 use AsaGuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\RequestInterface;
 
 /**
  * Returns an asynchronous response using curl_multi_* functions.

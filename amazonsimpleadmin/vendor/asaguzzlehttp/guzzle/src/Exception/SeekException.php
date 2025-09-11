@@ -1,7 +1,7 @@
 <?php
 namespace AsaGuzzleHttp\Exception;
 
-use Psr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\StreamInterface;
 
 /**
  * Exception thrown when a seek fails on a stream.

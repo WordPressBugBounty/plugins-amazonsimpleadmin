@@ -2,9 +2,9 @@
 namespace AsaGuzzleHttp\Psr7;
 
 use InvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use AsaPsr\Http\Message\RequestInterface;
+use AsaPsr\Http\Message\StreamInterface;
+use AsaPsr\Http\Message\UriInterface;
 
 /**
  * PSR-7 request implementation.
@@ -55,6 +55,7 @@ class Request implements RequestInterface
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function getRequestTarget()
     {
         if ($this->requestTarget !== null) {

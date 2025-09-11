@@ -114,7 +114,7 @@ class AsaCustomerReviews
             }
         }
 
-        if (strstr($this->averageRating, ',')) {
+        if ($this->averageRating !== null && strstr($this->averageRating, ',')) {
             $this->averageRating = str_replace(',', '.', $this->averageRating);
         }
         if (empty($this->averageRating)) {
