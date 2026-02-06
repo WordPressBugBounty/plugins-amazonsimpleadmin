@@ -1255,6 +1255,115 @@ msgstr "Ort:"
 msgid "No templates found."
 msgstr "Keine Templates gefunden."
 
+#. Creators API Setup Section
+#: AsaCore.php:2503
+msgid "Enable Creators API"
+msgstr "Creators API aktivieren"
+
+#: AsaCore.php:2508
+msgid "Use Creators API instead of PA API (when credentials are configured)"
+msgstr "Creators API anstelle von PA API verwenden (wenn Zugangsdaten konfiguriert sind)"
+
+#: AsaCore.php:2511
+msgid "Disabled: PHP 8.1+ required"
+msgstr "Deaktiviert: PHP 8.1+ erforderlich"
+
+#: AsaCore.php:2493
+msgid "Creators API Active"
+msgstr "Creators API aktiv"
+
+#: AsaCore.php:2494
+msgid "Product data will be fetched via Creators API. PA API serves as fallback."
+msgstr "Produktdaten werden über die Creators API abgerufen. PA API dient als Fallback."
+
+#: AsaCore.php:2518
+msgid "Credential ID"
+msgstr "Credential ID"
+
+#: AsaCore.php:2522
+msgid "Your Amazon Creators API Credential ID"
+msgstr "Deine Amazon Creators API Credential ID"
+
+#: AsaCore.php:2528
+msgid "Credential Secret"
+msgstr "Credential Secret"
+
+#: AsaCore.php:2533
+msgid "Your Amazon Creators API Credential Secret"
+msgstr "Dein Amazon Creators API Credential Secret"
+
+#: AsaCore.php:2533
+msgid "Secret is configured. Leave empty to keep current value."
+msgstr "Secret ist konfiguriert. Leer lassen, um den aktuellen Wert zu behalten."
+
+#: AsaCore.php:2538
+msgid "Tracking ID"
+msgstr "Tracking ID"
+
+#: AsaCore.php:2538
+msgid "optional"
+msgstr "optional"
+
+#: AsaCore.php:2542
+msgid "Optional: Override the Amazon Tracking ID for Creators API. If empty, the Tracking ID from PA API settings above is used."
+msgstr "Optional: Überschreibt die Amazon Tracking ID für die Creators API. Wenn leer, wird die Tracking ID aus den PA API-Einstellungen oben verwendet."
+
+#: AsaCore.php:2563
+msgid "Marketplace"
+msgstr "Marktplatz"
+
+#: AsaCore.php:2567
+msgid "Derived from Amazon Country Code above. Creators API uses the same marketplace."
+msgstr "Abgeleitet vom Amazon Ländercode oben. Die Creators API verwendet denselben Marktplatz."
+
+#: AsaCore.php:2480
+msgid "PHP Version Notice"
+msgstr "PHP-Versionshinweis"
+
+#: AsaCore.php:2482
+msgid "The Creators API requires PHP %s or higher. Your current PHP version is %s. The PA API will be used instead."
+msgstr "Die Creators API erfordert PHP %s oder höher. Deine aktuelle PHP-Version ist %s. Stattdessen wird die PA API verwendet."
+
+#: AsaCore.php:2575
+msgid "Important Information"
+msgstr "Wichtige Informationen"
+
+#: AsaCore.php:2578
+msgid "<strong>PA API Fallback:</strong> If PA API credentials are configured and Creators API fails or is disabled, ASA1 automatically falls back to PA API."
+msgstr "<strong>PA API Fallback:</strong> Wenn PA API-Zugangsdaten konfiguriert sind und die Creators API fehlschlägt oder deaktiviert ist, wechselt ASA1 automatisch zur PA API."
+
+#: AsaCore.php:2581
+msgid "<strong>API Version:</strong> The API version is automatically determined based on the marketplace region:"
+msgstr "<strong>API-Version:</strong> Die API-Version wird automatisch basierend auf der Marktplatz-Region bestimmt:"
+
+#: AsaCore.php:2583
+msgid "Version 2.1: Americas (US, CA, MX, BR)"
+msgstr "Version 2.1: Amerika (US, CA, MX, BR)"
+
+#: AsaCore.php:2584
+msgid "Version 2.2: Europe/MENA/India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
+msgstr "Version 2.2: Europa/MENA/Indien (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
+
+#: AsaCore.php:2585
+msgid "Version 2.3: Far East (JP, AU, SG)"
+msgstr "Version 2.3: Fernost (JP, AU, SG)"
+
+#: AsaCore.php:2591
+msgid "<strong>Get Credentials:</strong> Find the PartnerNet URL for your country in our %1$s, then check out the %2$s to learn how to register."
+msgstr "<strong>Zugangsdaten erhalten:</strong> Die PartnerNet-URL für dein Land findest du in unserer %1$s, dann schaue in die %2$s, um zu erfahren, wie du dich registrierst."
+
+#: AsaCore.php:2592
+msgid "documentation"
+msgstr "Dokumentation"
+
+#: AsaCore.php:2593
+msgid "Amazon Creators API Documentation"
+msgstr "Amazon Creators API Dokumentation"
+
+#: AsaCore.php:2469
+msgid "Amazon Creators API"
+msgstr "Amazon Creators API"
+
 #~ msgid "Bestseller lists"
 #~ msgstr "Bestellerlisten"
 
@@ -1392,3 +1501,19 @@ msgstr "Keine Templates gefunden."
 #~ "Wichtig: Benutze das Debugging nur vorübergehend wenn du Probleme mit ASA "
 #~ "hast. Frage den <a href=\"%s\" target=\"_blank\">Support</a> wenn du mit "
 #~ "den Debugging Informationen nichts anfangen kannst."
+
+#: AsaCore.php:2502
+msgid "Plugin Conflict Detected"
+msgstr "Plugin-Konflikt erkannt"
+
+#: AsaCore.php:2503
+msgid "The Creators API in ASA1 cannot be used because another plugin (likely ASA2) has loaded an incompatible version of the GuzzleHttp library."
+msgstr "Die Creators API in ASA1 kann nicht verwendet werden, da ein anderes Plugin (vermutlich ASA2) eine inkompatible Version der GuzzleHttp-Bibliothek geladen hat."
+
+#: AsaCore.php:2506
+msgid "If you are using ASA2, you do not need the Creators API in ASA1 &mdash; ASA2 already includes full Creators API support."
+msgstr "Wenn Sie ASA2 verwenden, benötigen Sie die Creators API in ASA1 nicht &mdash; ASA2 enthält bereits vollständige Creators API-Unterstützung."
+
+#: AsaCore.php:2507
+msgid "To configure the Creators API setup in ASA1, please deactivate ASA2 first."
+msgstr "Um die Creators API in ASA1 zu konfigurieren, deaktivieren Sie bitte zuerst ASA2."

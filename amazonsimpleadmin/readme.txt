@@ -1,10 +1,10 @@
 === Affiliate Super Assistent ===
 Tags: amazon, affiliate, monetize, commission, marketing
 Contributors: worschtebrot
-Requires at least: 2.1
-Requires PHP: 7.4
-Tested up to: 6.8.2
-Stable tag: 1.7.0
+Requires at least: 5.1
+Requires PHP: 8.1
+Tested up to: 6.9.0
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ Find the latest news on the [blog](https://www.wp-amazon-plugin.com/blog/) and c
 Features:
 
 * Make money with WordPress and Amazon's affiliate program
+* Supports Amazon Creators API
 * Supports Amazon PA API 5.0
 * Utilizes the Amazon Product Advertising API to receive product data
 * Ease of use with asa-**Shortcode** tags
@@ -45,6 +46,7 @@ Features:
 
 Features of the Pro Version:
 
+* [Amazon Creators API with Multi-Marketplace Support](https://docs.getasa2.com/creators_api_multi_marketplace.html#creators-api-multi-marketplace)
 * [Supports other Shops besides Amazon](https://docs.getasa2.com/shops.html)
 * [Create Amazon prodcuts without PA API](https://docs.getasa2.com/create_amazon_product_without_api.html)
 * [Managed Templates](https://docs.getasa2.commanaged_templates.html)
@@ -91,6 +93,28 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.9.0 =
+* Added: Support for Amazon Creators API as alternative data source
+* Added: Automatic API version selection based on region
+* Added: Optional Tracking ID override for Creators API requests
+* Added: Automatic fallback to PA API if Creators API fails or is not configured
+* Added: V2 Offers aggregation for full price placeholder support with Creators API
+* Added: Setup form with secure credential management for Creators API
+* Changed: Enhanced security for credential storage (secrets not displayed in form)
+* Requires: PHP 8.1+ for Creators API functionality (PA API still works with PHP 7.4+)
+* Info: Creators API provides an alternative to PA API, especially after January 31, 2026
+
+= 1.8.0 =
+* Added: Full support for Amazon PA API Offers V2 structure with enhanced product data
+* Added: Automatic preference for Offers V2 when available, with seamless fallback to Offers V1 for backward compatibility
+* Added: Enhanced price data processing with SavingBasis type information (LIST_PRICE, RRP, WAS_PRICE) for more accurate pricing details
+* Added: Improved availability information with granular stock status types (IN_STOCK, IN_STOCK_SCARCE, OUT_OF_STOCK, etc.)
+* Added: Support for new Offers V2 fields including availability constraints, MAP violation flags, and deal details
+* Added: Debug constant ASA1_DEBUG_OFFERS_V2 for optional Offers V2 processing logging
+* Changed: Updated PA API SDK with Offers V2 resource constants for future-proof API compatibility
+* Changed: Product data processing now prioritizes V2 structure when returned by Amazon API
+* Info: Preparation complete for Amazon's Offers V1 deprecation on January 31, 2026
 
 = 1.7.0 =
 * Added: Template section in admin menu to show all available built-in and custom template with example shortcodes

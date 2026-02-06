@@ -1,5 +1,6 @@
 <?php
 define('ASA_INCLUDE_DIR', dirname(__FILE__) . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR);
+define('ASA1_DEBUG_OFFERS_V2', false);
 include_once ASA_INCLUDE_DIR . 'asa_helper_functions.php';
 include_once ASA_INCLUDE_DIR . 'ifw-php-lib-functions.php';
 
@@ -8,12 +9,9 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.7.0';
+    const VERSION = '1.9.0';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
-
-    const PA_API_4 = 4;
-    const PA_API_5 = 5;
 
     const NONCE_SAVE_OPTIONS = 'asa1-save-options';
     const NONCE_SAVE_CACHE_OPTIONS = 'asa1-save-cache-options';
@@ -127,11 +125,6 @@ class AmazonSimpleAdmin {
      * @var
      */
     protected $_amazon_api_connection_type = 'https';
-
-    /**
-     * @var int|null
-     */
-    protected $_amazon_pa_api_version;
 
     /**
      * @var bool
@@ -1155,16 +1148,23 @@ class AmazonSimpleAdmin {
 
                 if (count($_POST) > 0 && isset($_POST['setup_update'])) {
 
-                    if (!wp_verify_nonce($_POST['nonce'], self::NONCE_SAVE_SETUP)) {
+                    // Security: Check capability before processing POST data
+                    if (!current_user_can('asa1_edit_setup') && !current_user_can('activate_plugins')) {
+                        $this->_displayError(__('You do not have sufficient permissions to access this page.', 'asa1'));
+                    } elseif (!wp_verify_nonce($_POST['nonce'], self::NONCE_SAVE_SETUP)) {
                         $this->_displayError(__('Invalid access', 'asa1'));
                     } else {
                         $_asa_amazon_api_key = sanitize_text_field($_POST['_asa_amazon_api_key']);
-                        $_asa_amazon_api_secret_key = base64_encode(sanitize_text_field($_POST['_asa_amazon_api_secret_key']));
                         $_asa_amazon_tracking_id = sanitize_text_field($_POST['_asa_amazon_tracking_id']);
 
                         update_option('_asa_amazon_api_key', $_asa_amazon_api_key);
-                        update_option('_asa_amazon_api_secret_key', $_asa_amazon_api_secret_key);
                         update_option('_asa_amazon_tracking_id', $_asa_amazon_tracking_id);
+
+                        // Only update secret if a new value is provided (allows keeping existing secret)
+                        if (!empty($_POST['_asa_amazon_api_secret_key'])) {
+                            $_asa_amazon_api_secret_key = base64_encode(sanitize_text_field($_POST['_asa_amazon_api_secret_key']));
+                            update_option('_asa_amazon_api_secret_key', $_asa_amazon_api_secret_key);
+                        }
 
                         if (isset($_POST['_asa_amazon_country_code'])) {
                             $_asa_amazon_country_code = sanitize_text_field($_POST['_asa_amazon_country_code']);
@@ -1172,6 +1172,37 @@ class AmazonSimpleAdmin {
                                 $_asa_amazon_country_code = 'US';
                             }
                             update_option('_asa_amazon_country_code', $_asa_amazon_country_code);
+                        }
+
+                        // Save Creators API Credentials
+                        require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi/Credentials.php';
+                        $creatorsCredentials = Asa_Service_CreatorsApi_Credentials::getInstance();
+
+                        // Only process if PHP version supports Creators API
+                        if (Asa_Service_CreatorsApi_Credentials::isPhpVersionSupported()) {
+                            // Enabled checkbox
+                            $creatorsApiEnabled = isset($_POST['_asa_creators_api_enabled']) && $_POST['_asa_creators_api_enabled'] === '1';
+                            $creatorsCredentials->setEnabled($creatorsApiEnabled);
+
+                            // Credential ID
+                            if (isset($_POST['_asa_creators_api_credential_id'])) {
+                                $creatorsCredentials->setCredentialId($_POST['_asa_creators_api_credential_id']);
+                            }
+
+                            // Credential Secret (only update if not empty - allows keeping existing secret)
+                            if (!empty($_POST['_asa_creators_api_credential_secret'])) {
+                                $creatorsCredentials->setCredentialSecret($_POST['_asa_creators_api_credential_secret']);
+                            }
+
+                            // Tracking ID (optional override)
+                            if (isset($_POST['_asa_creators_api_tracking_id'])) {
+                                $creatorsCredentials->setTrackingId($_POST['_asa_creators_api_tracking_id']);
+                            }
+
+                            $creatorsCredentials->save();
+
+                            // Reset singleton to reload credentials
+                            Asa_Service_CreatorsApi_Credentials::resetInstance();
                         }
 
                         $this->_displaySuccess(__('Settings saved.', 'asa1'));
@@ -2137,6 +2168,7 @@ class AmazonSimpleAdmin {
                     <p><span class="dashicons dashicons-book"></span> <a href="https://docs.getasa2.com/kickstarter_guide_for_asa2_switchers.html" target="_blank"><?php _e('Kickstarter Guide for ASA2 Switchers', 'asa1'); ?></a></p>
                     <p><b><?php _e('Just some of ASA2\'s amazing new features:', 'asa1'); ?></b></p>
                     <ul>
+                        <li><a href="https://docs.getasa2.com/creators_api_multi_marketplace.html#creators-api-multi-marketplace" target="_blank">Amazon Creators API Multi-Marketplace</li>
                         <li><a href="https://docs.getasa2.com/shops.html#using-external-data" target="_blank">CSV Import</li>
                         <li><a href="https://docs.getasa2.com/shop_data_known_shops_awin.html" target="_blank">Awin.com Support</li>
                         <li><a href="https://docs.getasa2.com/shops.html" target="_blank">Shops Feature</li>
@@ -2348,7 +2380,13 @@ class AmazonSimpleAdmin {
                         <?php
 
                         if ($_asa_status == true) {
-                            $statusText = __('Connected', 'asa1');
+                            // Check which API is active
+                            $usingCreatorsApi = asa_should_use_creators_api();
+                            if ($usingCreatorsApi) {
+                                $statusText = __('Connected', 'asa1') . ' (Creators API)';
+                            } else {
+                                $statusText = __('Connected', 'asa1') . ' (PA API)';
+                            }
                             $statusClass = 'asa-api-status-connected';
                         } else {
                             $statusText = __('Not connected', 'asa1');
@@ -2356,9 +2394,7 @@ class AmazonSimpleAdmin {
                         }
 
                         if (!empty($_asa_error)) {
-                            echo '<div id="message" class="error"><p><strong>'. __('Error', 'asa1') .':</strong> '. esc_html($_asa_error);
-                            echo '<br>'. __('Get help at', 'asa1') .' <a href="https://www.wp-amazon-plugin.com/faq/#setup_errors" target="_blank">https://www.wp-amazon-plugin.com/faq/#setup_errors</a></p></div>';
-                            echo '<p class="error-message"><strong>'. __('Error', 'asa1') .':</strong> '. esc_html( $_asa_error ) . '</p>';
+                            echo '<div id="message" class="error"><p><strong>'. __('Error', 'asa1') .':</strong> '. esc_html($_asa_error) . '</p></div>';
                         }
                         ?>
 
@@ -2393,8 +2429,10 @@ class AmazonSimpleAdmin {
                                         <a href="https://www.wp-amazon-plugin.com/register-amazon-affiliate-product-advertising-api/?#13" target="_blank" class="asa_setup_help_link"><?php _e('What is this?', 'asa1'); ?></a>
                                     </th>
                                     <td>
-                                        <input type="password" name="_asa_amazon_api_secret_key" id="_asa_amazon_api_secret_key" autocomplete="off" value="<?php echo (!empty($this->_amazon_api_secret_key)) ? $this->_amazon_api_secret_key : ''; ?>" />
-
+                                        <input type="password" name="_asa_amazon_api_secret_key" id="_asa_amazon_api_secret_key" autocomplete="off" value="" placeholder="<?php echo (!empty($this->_amazon_api_secret_key)) ? '••••••••••••••••' : ''; ?>" />
+                                        <?php if (!empty($this->_amazon_api_secret_key)): ?>
+                                        <p class="description" style="color: #00a32a;">✓ <?php _e('Secret is configured. Leave empty to keep current value.', 'asa1'); ?></p>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
 
@@ -2431,9 +2469,146 @@ class AmazonSimpleAdmin {
                                     <td colspan="2"><span class="asa_setup_help_text"><span class="dashicons dashicons-info"></span> <?php _e('ASA2 supports use of multiple countries.', 'asa1'); ?> <a href="https://docs.getasa2.com/shortcodes_asa2.html#country-code"><?php _e('Read more', 'asa1'); ?></a></span></td>
                                 </tr>
 
+                            </tbody>
+                        </table>
+
+                        <?php
+                        // Creators API Section
+                        require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi/Credentials.php';
+                        $creatorsCredentials = Asa_Service_CreatorsApi_Credentials::getInstance();
+                        $creatorsApiPhpSupported = Asa_Service_CreatorsApi_Credentials::isPhpVersionSupported();
+                        $creatorsApiConflict = asa_creators_api_conflict_detected();
+                        $creatorsApiActive = asa_should_use_creators_api();
+                        $creatorsApiDisabled = !$creatorsApiPhpSupported || $creatorsApiConflict;
+                        ?>
+
+                        <h3 style="margin-top: 30px;"><?php _e('Amazon Creators API', 'asa1'); ?> <span style="font-size: 12px; font-weight: normal; color: #666;">(<?php _e('Optional', 'asa1'); ?>)</span></h3>
+
+                        <?php if (!$creatorsApiPhpSupported): ?>
+                        <div class="notice notice-warning inline" style="margin: 10px 0;">
+                            <p>
+                                <strong><?php _e('PHP Version Notice', 'asa1'); ?>:</strong>
+                                <?php printf(
+                                    __('The Creators API requires PHP %s or higher. Your current PHP version is %s. The PA API will be used instead.', 'asa1'),
+                                    Asa_Service_CreatorsApi_Credentials::getMinPhpVersion(),
+                                    PHP_VERSION
+                                ); ?>
+                            </p>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if ($creatorsApiConflict): ?>
+                        <div class="notice notice-error inline" style="margin: 10px 0;">
+                            <p>
+                                <strong><?php _e('Plugin Conflict Detected', 'asa1'); ?>:</strong>
+                                <?php _e('The Creators API in ASA1 cannot be used because another plugin (likely ASA2) has loaded an incompatible version of the GuzzleHttp library.', 'asa1'); ?>
+                            </p>
+                            <p>
+                                <?php _e('If you are using ASA2, you do not need the Creators API in ASA1 &mdash; ASA2 already includes full Creators API support.', 'asa1'); ?>
+                                <?php _e('To configure the Creators API setup in ASA1, please deactivate ASA2 first.', 'asa1'); ?>
+                            </p>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if ($creatorsApiActive): ?>
+                        <div class="notice notice-success inline" style="margin: 10px 0;">
+                            <p>
+                                <strong><?php _e('Creators API Active', 'asa1'); ?></strong> &mdash;
+                                <?php _e('Product data will be fetched via Creators API. PA API serves as fallback.', 'asa1'); ?>
+                            </p>
+                        </div>
+                        <?php endif; ?>
+
+                        <table class="form-table">
+                            <tbody>
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="_asa_creators_api_enabled"><?php _e('Enable Creators API', 'asa1'); ?></label>
+                                    </th>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" name="_asa_creators_api_enabled" id="_asa_creators_api_enabled" value="1" <?php checked($creatorsCredentials->isEnabled()); ?> <?php disabled($creatorsApiDisabled); ?> />
+                                            <?php _e('Use Creators API instead of PA API (when credentials are configured)', 'asa1'); ?>
+                                        </label>
+                                        <?php if (!$creatorsApiPhpSupported): ?>
+                                        <p class="description" style="color: #d63638;"><?php _e('Disabled: PHP 8.1+ required', 'asa1'); ?></p>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="_asa_creators_api_credential_id"><?php _e('Credential ID', 'asa1'); ?></label>
+                                    </th>
+                                    <td>
+                                        <input type="text" name="_asa_creators_api_credential_id" id="_asa_creators_api_credential_id" autocomplete="off" value="<?php echo esc_attr($creatorsCredentials->getCredentialId()); ?>" style="width: 350px;" <?php disabled($creatorsApiDisabled); ?> />
+                                        <p class="description"><?php _e('Your Amazon Creators API Credential ID', 'asa1'); ?></p>
+                                    </td>
+                                </tr>
+
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="_asa_creators_api_credential_secret"><?php _e('Credential Secret', 'asa1'); ?></label>
+                                    </th>
+                                    <td>
+                                        <input type="password" name="_asa_creators_api_credential_secret" id="_asa_creators_api_credential_secret" autocomplete="off" value="" placeholder="<?php echo $creatorsCredentials->hasCredentialSecret() ? '••••••••••••••••' : ''; ?>" style="width: 350px;" <?php disabled($creatorsApiDisabled); ?> />
+                                        <p class="description">
+                                            <?php _e('Your Amazon Creators API Credential Secret', 'asa1'); ?>
+                                            <?php if ($creatorsCredentials->hasCredentialSecret()): ?>
+                                            <br /><span style="color: #00a32a;">✓ <?php _e('Secret is configured. Leave empty to keep current value.', 'asa1'); ?></span>
+                                            <?php endif; ?>
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="_asa_creators_api_tracking_id"><?php _e('Tracking ID', 'asa1'); ?> (<?php _e('optional', 'asa1'); ?>)</label>
+                                    </th>
+                                    <td>
+                                        <input type="text" name="_asa_creators_api_tracking_id" id="_asa_creators_api_tracking_id" autocomplete="off" value="<?php echo esc_attr($creatorsCredentials->getTrackingId()); ?>" style="width: 350px;" placeholder="<?php echo esc_attr($this->amazon_tracking_id); ?>" <?php disabled($creatorsApiDisabled); ?> />
+                                        <p class="description"><?php _e('Optional: Override the Amazon Tracking ID for Creators API. If empty, the Tracking ID from PA API settings above is used.', 'asa1'); ?></p>
+                                    </td>
+                                </tr>
+
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label><?php _e('Marketplace', 'asa1'); ?></label>
+                                    </th>
+                                    <td>
+                                        <code><?php echo esc_html($this->_amazon_country_code); ?></code>
+                                        <p class="description"><?php _e('Derived from Amazon Country Code above. Creators API uses the same marketplace.', 'asa1'); ?></p>
+                                    </td>
+                                </tr>
 
                             </tbody>
                         </table>
+
+                        <div class="asa-info-box" style="background: #f0f6fc; border-left: 4px solid #2271b1; padding: 12px 15px; margin: 15px 0;">
+                            <h4 style="margin: 0 0 10px 0;"><span class="dashicons dashicons-info" style="color: #2271b1;"></span> <?php _e('Important Information', 'asa1'); ?></h4>
+                            <ul style="margin: 0; padding-left: 20px;">
+                                <li>
+                                    <?php _e('<strong>PA API Fallback:</strong> If PA API credentials are configured and Creators API fails or is disabled, ASA1 automatically falls back to PA API.', 'asa1'); ?>
+                                </li>
+                                <li>
+                                    <?php _e('<strong>API Version:</strong> The API version is automatically determined based on the marketplace region:', 'asa1'); ?>
+                                    <ul style="margin-left: 20px; margin-top: 5px; margin-bottom: 5px;">
+                                        <li><?php _e('Version 2.1: Americas (US, CA, MX, BR)', 'asa1'); ?></li>
+                                        <li><?php _e('Version 2.2: Europe/MENA/India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)', 'asa1'); ?></li>
+                                        <li><?php _e('Version 2.3: Far East (JP, AU, SG)', 'asa1'); ?></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <?php
+                                    printf(
+                                        __('<strong>Get Credentials:</strong> Find the PartnerNet URL for your country in our %1$s, then check out the %2$s to learn how to register.', 'asa1'),
+                                        '<a href="https://docs.getasa2.com/requirements.html#supported-api-country-stores" target="_blank" rel="noopener">' . __('documentation', 'asa1') . '</a>',
+                                        '<a href="https://affiliate-program.amazon.com/creatorsapi/docs/en-us/onboarding/register-for-creators-api" target="_blank" rel="noopener">' . __('Amazon Creators API Documentation', 'asa1') . '</a>'
+                                    );
+                                    ?>
+                                </li>
+                            </ul>
+                        </div>
 
 
                         <p class="submit">
@@ -3259,7 +3434,6 @@ class AmazonSimpleAdmin {
         $this->_amazon_api_secret_key = base64_decode(get_option('_asa_amazon_api_secret_key'));
         $this->amazon_tracking_id = get_option('_asa_amazon_tracking_id');
         $this->_amazon_api_connection_type = ifw_filter_scalar(get_option('_asa_api_connection_type'), array('http', 'https'), 'http');
-        $this->_amazon_pa_api_version = ifw_filter_scalar((int)get_option('_asa_pa_api_version'), array(self::PA_API_4, self::PA_API_5), self::PA_API_5);
 
         $amazon_country_code = get_option('_asa_amazon_country_code');
         if (!empty($amazon_country_code)) {

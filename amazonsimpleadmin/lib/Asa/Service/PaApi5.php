@@ -195,6 +195,7 @@ class Asa_Service_PaApi5 implements Asa_Service_Amazon_Interface
 
         $resources = array(
 
+            // V1 Offers resources (fallback for backward compatibility)
             GetItemsResource::OFFERSLISTINGSPRICE,
             GetItemsResource::OFFERSLISTINGSPROGRAM_ELIGIBILITYIS_PRIME_EXCLUSIVE,
             GetItemsResource::OFFERSLISTINGSPROGRAM_ELIGIBILITYIS_PRIME_PANTRY,
@@ -215,6 +216,15 @@ class Asa_Service_PaApi5 implements Asa_Service_Amazon_Interface
             GetItemsResource::OFFERSLISTINGSAVAILABILITYMESSAGE,
             GetItemsResource::OFFERSLISTINGSAVAILABILITYMIN_ORDER_QUANTITY,
             GetItemsResource::OFFERSLISTINGSAVAILABILITYTYPE,
+
+            // V2 Offers resources (new structure, preferred when available)
+            // Note: SavingBasis, ViolatesMAP, and DeliveryInfo are nested within Price in V2
+            GetItemsResource::OFFERSV2_LISTINGS_PRICE,
+            GetItemsResource::OFFERSV2_LISTINGS_AVAILABILITY,
+            GetItemsResource::OFFERSV2_LISTINGS_CONDITION,
+            GetItemsResource::OFFERSV2_LISTINGS_MERCHANTINFO,
+            GetItemsResource::OFFERSV2_LISTINGS_ISBUYBOXWINNER,
+            GetItemsResource::OFFERSV2_LISTINGS_DEALDETAILS,
 
             GetItemsResource::PARENT_ASIN,
             GetItemsResource::ITEM_INFOTITLE,

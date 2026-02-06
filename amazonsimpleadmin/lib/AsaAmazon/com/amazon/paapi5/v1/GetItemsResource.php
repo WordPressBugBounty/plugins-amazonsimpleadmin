@@ -83,7 +83,17 @@ class GetItemsResource
     const RENTAL_OFFERSLISTINGSDELIVERY_INFOIS_PRIME_ELIGIBLE = 'RentalOffers.Listings.DeliveryInfo.IsPrimeEligible';
     const RENTAL_OFFERSLISTINGSDELIVERY_INFOSHIPPING_CHARGES = 'RentalOffers.Listings.DeliveryInfo.ShippingCharges';
     const RENTAL_OFFERSLISTINGSMERCHANT_INFO = 'RentalOffers.Listings.MerchantInfo';
-    
+
+    // OffersV2 resources (added for Amazon PA API Offers V2 support)
+    const OFFERSV2_LISTINGS_AVAILABILITY = 'OffersV2.Listings.Availability';
+    const OFFERSV2_LISTINGS_CONDITION = 'OffersV2.Listings.Condition';
+    const OFFERSV2_LISTINGS_DEALDETAILS = 'OffersV2.Listings.DealDetails';
+    const OFFERSV2_LISTINGS_ISBUYBOXWINNER = 'OffersV2.Listings.IsBuyBoxWinner';
+    const OFFERSV2_LISTINGS_LOYALTYPOINTS = 'OffersV2.Listings.LoyaltyPoints';
+    const OFFERSV2_LISTINGS_MERCHANTINFO = 'OffersV2.Listings.MerchantInfo';
+    const OFFERSV2_LISTINGS_PRICE = 'OffersV2.Listings.Price';
+    const OFFERSV2_LISTINGS_TYPE = 'OffersV2.Listings.Type';
+
     /**
      * Gets allowable values of the enum
      * @return string[]
@@ -146,6 +156,15 @@ class GetItemsResource
             self::RENTAL_OFFERSLISTINGSDELIVERY_INFOIS_PRIME_ELIGIBLE,
             self::RENTAL_OFFERSLISTINGSDELIVERY_INFOSHIPPING_CHARGES,
             self::RENTAL_OFFERSLISTINGSMERCHANT_INFO,
+            // OffersV2
+            self::OFFERSV2_LISTINGS_AVAILABILITY,
+            self::OFFERSV2_LISTINGS_CONDITION,
+            self::OFFERSV2_LISTINGS_DEALDETAILS,
+            self::OFFERSV2_LISTINGS_ISBUYBOXWINNER,
+            self::OFFERSV2_LISTINGS_LOYALTYPOINTS,
+            self::OFFERSV2_LISTINGS_MERCHANTINFO,
+            self::OFFERSV2_LISTINGS_PRICE,
+            self::OFFERSV2_LISTINGS_TYPE,
         ];
     }
 }

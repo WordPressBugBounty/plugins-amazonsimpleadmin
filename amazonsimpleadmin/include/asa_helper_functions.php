@@ -262,6 +262,92 @@ if (!function_exists('asa_is_pa_api_5')) {
      */
     function asa_is_pa_api_5() {
         return true;
-        //return (int)get_option('_asa_pa_api_version') === AmazonSimpleAdmin::PA_API_5;
+    }
+}
+
+if (!function_exists('asa_should_use_creators_api')) {
+    /**
+     * Check if Creators API should be used instead of PA API
+     *
+     * Conditions:
+     * 1. PHP version >= 8.1
+     * 2. No GuzzleHttp conflict (ASA2 not active)
+     * 3. Creators API is enabled
+     * 4. Valid credentials are configured
+     *
+     * @return bool
+     */
+    function asa_should_use_creators_api() {
+        // Quick PHP version check first (avoid loading class if not needed)
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            return false;
+        }
+
+        // Check for GuzzleHttp conflict (e.g., ASA2 is active)
+        if (asa_creators_api_conflict_detected()) {
+            return false;
+        }
+
+        // Load credentials class
+        if (!class_exists('Asa_Service_CreatorsApi_Credentials')) {
+            require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi/Credentials.php';
+        }
+
+        $credentials = Asa_Service_CreatorsApi_Credentials::getInstance();
+        return $credentials->isUsable();
+    }
+}
+
+if (!function_exists('asa_is_creators_api_php_supported')) {
+    /**
+     * Check if PHP version supports Creators API
+     *
+     * @return bool
+     */
+    function asa_is_creators_api_php_supported() {
+        return version_compare(PHP_VERSION, '8.1.0', '>=');
+    }
+}
+
+if (!function_exists('asa_is_asa2_active')) {
+    /**
+     * Check if ASA2 plugin is active
+     *
+     * When ASA2 is active, the Creators API in ASA1 cannot be used because
+     * ASA2 loads the original GuzzleHttp namespace which conflicts with
+     * ASA1's prefixed AsaGuzzleHttp namespace.
+     *
+     * @return bool
+     */
+    function asa_is_asa2_active() {
+        // Check for ASA2 specific constants or classes
+        if (defined('ASA2_PLUGIN_FILE') || defined('ASA2_VERSION')) {
+            return true;
+        }
+
+        // Check for ASA2 main class
+        if (class_exists('Asa2', false)) {
+            return true;
+        }
+
+        // Check if original GuzzleHttp is loaded (indicates potential conflict)
+        // ASA1 uses AsaGuzzleHttp, if GuzzleHttp\Client exists, another plugin loaded it
+        if (class_exists('GuzzleHttp\Client', false)) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('asa_creators_api_conflict_detected')) {
+    /**
+     * Check if there's a GuzzleHttp conflict that prevents Creators API usage
+     *
+     * @return bool
+     */
+    function asa_creators_api_conflict_detected() {
+        // If GuzzleHttp\Client exists (not AsaGuzzleHttp), there's a conflict
+        return class_exists('GuzzleHttp\Client', false);
     }
 }

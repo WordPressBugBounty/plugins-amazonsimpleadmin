@@ -151,16 +151,36 @@ class Asa_Service_Amazon implements Asa_Service_Amazon_Interface
     /**
      * Factory
      *
-     * @param string $access_key
-     * @param string $secret
-     * @param string $tag
-     * @param string $locale
-     * @param null $connection_type
-     * @return Asa_Service_Amazon
+     * Creates the appropriate Amazon service based on configuration.
+     * Priority:
+     * 1. Creators API (if PHP 8.1+, enabled, and credentials configured)
+     * 2. PA API 5.0 (default)
+     *
+     * @param string $access_key PA API Access Key
+     * @param string $secret PA API Secret Key
+     * @param string $tag Associate Tag
+     * @param string $locale Locale (country code)
+     * @param null $connection_type Connection type
+     * @return Asa_Service_Amazon_Interface
      * @throws Asa_Service_Amazon_Exception
      */
     public static function factory($access_key, $secret, $tag, $locale, $connection_type = null)
     {
+        // Check if Creators API should be used
+        if (asa_should_use_creators_api()) {
+            try {
+                require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi.php';
+                return new Asa_Service_CreatorsApi($tag, $locale);
+            } catch (\Throwable $e) {
+                // Creators API failed (likely due to GuzzleHttp conflict with ASA2)
+                // Fall back to PA API silently
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('ASA1 Creators API init failed: ' . $e->getMessage() . ' - falling back to PA API');
+                }
+            }
+        }
+
+        // Default: Use PA API 5.0
         if (asa_is_pa_api_5()) {
             $Asa = new Asa_Service_PaApi5($access_key, $secret, $tag, $locale, $connection_type);
         } else {
@@ -172,8 +192,18 @@ class Asa_Service_Amazon implements Asa_Service_Amazon_Interface
                 return $AsaDebug;
             }
         }
-        
+
         return $Asa;
+    }
+
+    /**
+     * Check if Creators API is currently active
+     *
+     * @return bool
+     */
+    public static function isCreatorsApiActive()
+    {
+        return asa_should_use_creators_api();
     }    
 
     /**
