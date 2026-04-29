@@ -127,15 +127,23 @@ class Asa_Service_CreatorsApi implements Asa_Service_Amazon_Interface
      */
     public function __construct($tag, $locale)
     {
-        if (empty($locale)) {
-            throw new Asa_Service_Amazon_Exception('Missing locale');
-        }
-        if (!$this->isValidLocale($locale)) {
-            throw new Asa_Service_Amazon_Exception('Invalid locale for Creators API: ' . $locale);
+        $this->_credentials = Asa_Service_CreatorsApi_Credentials::getInstance();
+
+        // Prefer Creators API country code override, otherwise fall back to PA API locale
+        if ($this->_credentials->hasCountryCode() && $this->isValidLocale($this->_credentials->getCountryCode())) {
+            $effectiveLocale = $this->_credentials->getCountryCode();
+        } else {
+            $effectiveLocale = $locale;
         }
 
-        $this->_locale = $locale;
-        $this->_credentials = Asa_Service_CreatorsApi_Credentials::getInstance();
+        if (empty($effectiveLocale)) {
+            throw new Asa_Service_Amazon_Exception('Missing locale');
+        }
+        if (!$this->isValidLocale($effectiveLocale)) {
+            throw new Asa_Service_Amazon_Exception('Invalid locale for Creators API: ' . $effectiveLocale);
+        }
+
+        $this->_locale = $effectiveLocale;
 
         if (!$this->_credentials->hasValidCredentials()) {
             throw new Asa_Service_Amazon_Exception('Creators API credentials are not configured');
@@ -165,7 +173,7 @@ class Asa_Service_CreatorsApi implements Asa_Service_Amazon_Interface
                 $config = new Configuration();
                 $config->setCredentialId($this->_credentials->getCredentialId());
                 $config->setCredentialSecret($this->_credentials->getCredentialSecret());
-                $config->setVersion($this->getVersionForLocale($this->_locale));
+                $config->setVersion($this->getEffectiveVersion());
 
                 // Use ASA's prefixed Guzzle client (SDK modified to use AsaGuzzleHttp)
                 $client = new \AsaGuzzleHttp\Client();
@@ -186,20 +194,57 @@ class Asa_Service_CreatorsApi implements Asa_Service_Amazon_Interface
     }
 
     /**
-     * Get the API version for a specific locale
+     * Get the API version for a specific locale (legacy v2.x default mapping)
      *
-     * Different locales require different API versions because each version
-     * uses a different OAuth2 authentication endpoint:
-     * - 2.1 (Americas): us-east-1
-     * - 2.2 (Europe): eu-south-2
-     * - 2.3 (Far East): us-west-2
+     * Used as fallback when the user has not explicitly chosen a credential
+     * version. v3.x credentials cannot be inferred from the locale alone, since
+     * v2 and v3 cover the same regions but indicate which OAuth2 provider
+     * (Cognito vs LWA) Amazon issued the credentials for.
      *
      * @param string $locale Country code
-     * @return string API version
+     * @return string API version (defaults to 2.1 Americas)
      */
     public function getVersionForLocale($locale)
     {
+        return self::getDefaultVersionForLocale($locale);
+    }
+
+    /**
+     * Static accessor for the legacy locale → v2 version mapping
+     *
+     * @param string $locale Country code
+     * @return string API version (defaults to 2.1 Americas)
+     */
+    public static function getDefaultVersionForLocale($locale)
+    {
         return self::$localeVersionMap[$locale] ?? self::API_VERSION_AMERICAS;
+    }
+
+    /**
+     * Get the supported Creators API marketplace codes
+     *
+     * @return array List of country codes supported by the Creators API
+     */
+    public static function getSupportedLocales()
+    {
+        return array_keys(self::$marketplaces);
+    }
+
+    /**
+     * Resolve the effective credential version
+     *
+     * Priority:
+     * 1. User-configured version (Asa_Service_CreatorsApi_Credentials::getVersion())
+     * 2. Locale-based default mapping (v2.x only) for backward compatibility
+     *
+     * @return string API version
+     */
+    public function getEffectiveVersion()
+    {
+        if ($this->_credentials->hasVersion()) {
+            return $this->_credentials->getVersion();
+        }
+        return $this->getVersionForLocale($this->_locale);
     }
 
     /**
@@ -329,7 +374,23 @@ class Asa_Service_CreatorsApi implements Asa_Service_Amazon_Interface
      */
     public function testConnection()
     {
-        $result = $this->itemSearch(['Keywords' => 'test', 'ItemCount' => 1]);
+        try {
+            $result = $this->itemSearch(['Keywords' => 'test', 'ItemCount' => 1]);
+        } catch (ApiException $e) {
+            $code = (int) $e->getCode();
+            $this->_throwAuthAwareException($code, $e->getMessage());
+        } catch (\Exception $e) {
+            // OAuth token errors from the SDK propagate as plain \Exception.
+            // Detect 401/invalid_client patterns to give a useful hint.
+            $message = $e->getMessage();
+            $code = (int) $e->getCode();
+            if ($code === 0 && (stripos($message, 'invalid_client') !== false
+                    || stripos($message, '401') !== false
+                    || stripos($message, 'Client authentication failed') !== false)) {
+                $code = 401;
+            }
+            $this->_throwAuthAwareException($code, $message);
+        }
 
         // If result is null, SDK initialization failed (likely ASA2 conflict)
         if ($result === null) {
@@ -338,6 +399,36 @@ class Asa_Service_CreatorsApi implements Asa_Service_Amazon_Interface
                 'If ASA2 is active, the Creators API in ASA1 is not needed.'
             );
         }
+    }
+
+    /**
+     * Convert an upstream error into a sprechende Asa_Service_Amazon_Exception
+     * with hints about credential version / locale mismatches.
+     *
+     * @param int $code
+     * @param string $message
+     * @throws Asa_Service_Amazon_Exception
+     */
+    private function _throwAuthAwareException($code, $message)
+    {
+        if ($code === 401 || $code === 403) {
+            $version = $this->getEffectiveVersion();
+            $isLwa   = strncmp($version, '3.', 2) === 0;
+            $hint    = $isLwa
+                ? 'Verify that the Credential ID and Secret are correct (no extra whitespace from copy/paste) and that the Credential Version matches what Amazon issued (3.1 = Americas, 3.2 = EU/MENA/India, 3.3 = Far East). If your credentials were issued before February 2026, switch to the matching v2.x version (Cognito).'
+                : 'Verify that the Credential ID and Secret are correct (no extra whitespace from copy/paste) and that the Credential Version matches what Amazon issued (2.1 = Americas, 2.2 = EU/MENA/India, 2.3 = Far East). If your credentials were issued from February 2026 onwards, switch to a v3.x version (LWA).';
+
+            throw new Asa_Service_Amazon_Exception(
+                sprintf(
+                    'Creators API authentication failed (HTTP %d) using credential version %s. %s Original error: %s',
+                    $code,
+                    $version,
+                    $hint,
+                    $message
+                )
+            );
+        }
+        throw new Asa_Service_Amazon_Exception($message, $code);
     }
 
     /**

@@ -9,7 +9,7 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.9.0';
+    const VERSION = '1.10.0';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
 
@@ -352,6 +352,12 @@ class AmazonSimpleAdmin {
         delete_option('_asa_api_connection_type');
         delete_option('_asa_pa_api_version');
         delete_option('_asa_amazon_country_code');
+        delete_option('_asa_creators_api_credential_id');
+        delete_option('_asa_creators_api_credential_secret');
+        delete_option('_asa_creators_api_enabled');
+        delete_option('_asa_creators_api_tracking_id');
+        delete_option('_asa_creators_api_version');
+        delete_option('_asa_creators_api_country_code');
         delete_option('_asa_donated');
         delete_option('_asa_newsletter');
 
@@ -1197,6 +1203,22 @@ class AmazonSimpleAdmin {
                             // Tracking ID (optional override)
                             if (isset($_POST['_asa_creators_api_tracking_id'])) {
                                 $creatorsCredentials->setTrackingId($_POST['_asa_creators_api_tracking_id']);
+                            }
+
+                            // Credential version (Cognito v2.x or LWA v3.x)
+                            if (isset($_POST['_asa_creators_api_version'])) {
+                                $creatorsCredentials->setVersion(sanitize_text_field($_POST['_asa_creators_api_version']));
+                            }
+
+                            // Country code override (validated against supported Creators API marketplaces)
+                            if (isset($_POST['_asa_creators_api_country_code'])) {
+                                if (!class_exists('Asa_Service_CreatorsApi', false)) {
+                                    require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi.php';
+                                }
+                                $countryInput = strtoupper(sanitize_text_field($_POST['_asa_creators_api_country_code']));
+                                if ($countryInput === '' || in_array($countryInput, Asa_Service_CreatorsApi::getSupportedLocales(), true)) {
+                                    $creatorsCredentials->setCountryCode($countryInput);
+                                }
                             }
 
                             $creatorsCredentials->save();
@@ -2317,6 +2339,28 @@ class AmazonSimpleAdmin {
 
         <div id="asa_setup">
 
+            <div class="notice notice-error" style="border-left-width: 4px; padding: 12px 15px; margin: 15px 0;">
+                <h3 style="margin: 0 0 8px 0; color: #d63638;">
+                    <span class="dashicons dashicons-warning" style="color: #d63638;"></span>
+                    <?php _e('Amazon PA API is being deprecated', 'asa1'); ?>
+                </h3>
+                <p style="margin: 0 0 8px 0;">
+                    <?php _e('<strong>Amazon has announced the deprecation of the Product Advertising API (PA API). The API is expected to stop working on or around May 15, 2026.</strong>', 'asa1'); ?>
+                </p>
+                <p style="margin: 0 0 8px 0;">
+                    <?php _e('To keep your Amazon affiliate integrations working, switch to the <strong>Amazon Creators API</strong> as soon as possible. ASA1 already supports both Cognito (v2.x) and LWA (v3.x) credentials &mdash; configure them in the <em>Amazon Creators API</em> section below.', 'asa1'); ?>
+                </p>
+                <p style="margin: 0;">
+                    <?php
+                    printf(
+                        /* translators: %s: link to Amazon Creators API onboarding documentation */
+                        __('Learn how to register: %s.', 'asa1'),
+                        '<a href="https://affiliate-program.amazon.com/creatorsapi/docs/en-us/onboarding/register-for-creators-api" target="_blank" rel="noopener">' . __('Amazon Creators API onboarding', 'asa1') . '</a>'
+                    );
+                    ?>
+                </p>
+            </div>
+
             <div class="asa_widget">
                 <h3><?php _e('Further information', 'asa1'); ?></h3>
 
@@ -2398,21 +2442,27 @@ class AmazonSimpleAdmin {
                         }
                         ?>
 
-                        <p><?php _e('Please fill in your Amazon Product Advertising API credentials.', 'asa1') ?> <?php _e('Fields marked with * are mandatory:', 'asa1') ?></p>
-
                         <form method="post">
+
+                        <div class="asa-api-status-bar" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 3px; padding: 10px 15px; margin: 10px 0 20px 0; display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <strong><?php _e('Status', 'asa1') ?>:</strong>
+                            <span class="asa-api-status <?php echo esc_attr($statusClass); ?>" id="api-status"><?php echo esc_html( $statusText ); ?></span>
+                            <?php if ($_asa_status == true): ?>
+                                <span style="color: #666;">&mdash; <?php printf(__('Check <a%s>%s</a> to see how ASA works.', 'asa1'), ' href="options-general.php?page=amazonsimpleadmin%2Famazonsimpleadmin.php&task=usage"', __('Usage', 'asa1')); ?></span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="asa-api-section" style="background: #fff; border: 1px solid #ccd0d4; border-radius: 3px; padding: 5px 20px 15px 20px; margin: 15px 0; opacity: 0.92;">
+                            <h3 style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                                <?php _e('Amazon Product Advertising API (PA API)', 'asa1'); ?>
+                                <span style="background: #d63638; color: #fff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px;"><?php _e('Deprecated', 'asa1'); ?></span>
+                            </h3>
+                            <p style="color: #666; margin: 0 0 15px 0;">
+                                <?php _e('The Amazon PA API is being shut down on or around May 15, 2026. Please configure the Creators API below as a replacement.', 'asa1'); ?>
+                                <?php _e('Fields marked with * are mandatory:', 'asa1') ?>
+                            </p>
                         <table class="form-table">
                             <tbody>
-                                <tr valign="top">
-                                    <th scope="row">
-                                        <label><?php _e('Status', 'asa1') ?></label>
-                                    </th>
-                                    <td>
-                                        <span class="asa-api-status <?php echo esc_attr($statusClass); ?>" id="api-status"><?php echo esc_html( $statusText ); ?></span>
-                                        &nbsp;&nbsp;&nbsp;<?php if ($_asa_status == true): printf(__('Check <a%s>%s</a> to see how ASA works.', 'asa1'), ' href="options-general.php?page=amazonsimpleadmin%2Famazonsimpleadmin.php&task=usage"', __('Usage', 'asa1')); endif; ?>
-                                    </td>
-                                </tr>
-
                                 <tr valign="top">
                                     <th scope="row">
                                         <label for="_asa_amazon_api_key"<?php if (empty($this->_amazon_api_key)) { echo ' class="_asa_error_color"'; } ?>><?php _e('Amazon Access Key ID', 'asa1') ?> *</label><br>
@@ -2471,6 +2521,7 @@ class AmazonSimpleAdmin {
 
                             </tbody>
                         </table>
+                        </div><!-- /.asa-api-section (PA API) -->
 
                         <?php
                         // Creators API Section
@@ -2482,7 +2533,11 @@ class AmazonSimpleAdmin {
                         $creatorsApiDisabled = !$creatorsApiPhpSupported || $creatorsApiConflict;
                         ?>
 
-                        <h3 style="margin-top: 30px;"><?php _e('Amazon Creators API', 'asa1'); ?> <span style="font-size: 12px; font-weight: normal; color: #666;">(<?php _e('Optional', 'asa1'); ?>)</span></h3>
+                        <div class="asa-api-section" style="background: #fff; border: 1px solid #2271b1; border-radius: 3px; padding: 5px 20px 15px 20px; margin: 15px 0; box-shadow: 0 0 0 1px #2271b1;">
+                            <h3 style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                                <?php _e('Amazon Creators API', 'asa1'); ?>
+                                <span style="background: #00a32a; color: #fff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px;"><?php _e('Recommended', 'asa1'); ?></span>
+                            </h3>
 
                         <?php if (!$creatorsApiPhpSupported): ?>
                         <div class="notice notice-warning inline" style="margin: 10px 0;">
@@ -2573,11 +2628,64 @@ class AmazonSimpleAdmin {
 
                                 <tr valign="top">
                                     <th scope="row">
-                                        <label><?php _e('Marketplace', 'asa1'); ?></label>
+                                        <label for="_asa_creators_api_version"><?php _e('Credential Version', 'asa1'); ?></label>
                                     </th>
                                     <td>
-                                        <code><?php echo esc_html($this->_amazon_country_code); ?></code>
-                                        <p class="description"><?php _e('Derived from Amazon Country Code above. Creators API uses the same marketplace.', 'asa1'); ?></p>
+                                        <?php
+                                        $configuredVersion = $creatorsCredentials->getVersion();
+                                        $localeFallback    = Asa_Service_CreatorsApi_Credentials::getDefaultVersionForLocale($this->_amazon_country_code);
+                                        ?>
+                                        <select name="_asa_creators_api_version" id="_asa_creators_api_version" <?php disabled($creatorsApiDisabled); ?>>
+                                            <option value=""><?php
+                                                printf(
+                                                    /* translators: %s: locale-derived fallback version (e.g. "2.2") */
+                                                    __('Auto (locale default: %s)', 'asa1'),
+                                                    esc_html($localeFallback ?: '2.1')
+                                                );
+                                            ?></option>
+                                            <optgroup label="<?php esc_attr_e('Cognito (v2.x)', 'asa1'); ?>">
+                                                <option value="2.1" <?php selected($configuredVersion, '2.1'); ?>><?php _e('2.1 — Americas (US, CA, MX, BR)', 'asa1'); ?></option>
+                                                <option value="2.2" <?php selected($configuredVersion, '2.2'); ?>><?php _e('2.2 — Europe / MENA / India', 'asa1'); ?></option>
+                                                <option value="2.3" <?php selected($configuredVersion, '2.3'); ?>><?php _e('2.3 — Far East (JP, AU, SG)', 'asa1'); ?></option>
+                                            </optgroup>
+                                            <optgroup label="<?php esc_attr_e('LWA (v3.x)', 'asa1'); ?>">
+                                                <option value="3.1" <?php selected($configuredVersion, '3.1'); ?>><?php _e('3.1 — Americas (US, CA, MX, BR)', 'asa1'); ?></option>
+                                                <option value="3.2" <?php selected($configuredVersion, '3.2'); ?>><?php _e('3.2 — Europe / MENA / India', 'asa1'); ?></option>
+                                                <option value="3.3" <?php selected($configuredVersion, '3.3'); ?>><?php _e('3.3 — Far East (JP, AU, SG)', 'asa1'); ?></option>
+                                            </optgroup>
+                                        </select>
+                                        <p class="description">
+                                            <?php _e('Choose the version that matches your Amazon Creators API credentials. v2.x credentials use Cognito; v3.x credentials (issued from February 2026) use LWA. The version is shown in your Amazon credentials confirmation email.', 'asa1'); ?>
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="_asa_creators_api_country_code"><?php _e('Marketplace', 'asa1'); ?></label>
+                                    </th>
+                                    <td>
+                                        <?php
+                                        if (!class_exists('Asa_Service_CreatorsApi', false)) {
+                                            require_once ASA_LIB_DIR . 'Asa/Service/CreatorsApi.php';
+                                        }
+                                        $configuredCountry = $creatorsCredentials->getCountryCode();
+                                        $supportedLocales  = Asa_Service_CreatorsApi::getSupportedLocales();
+                                        sort($supportedLocales);
+                                        ?>
+                                        <select name="_asa_creators_api_country_code" id="_asa_creators_api_country_code" <?php disabled($creatorsApiDisabled); ?>>
+                                            <option value=""><?php
+                                                printf(
+                                                    /* translators: %s: PA API country code (e.g. "DE") */
+                                                    __('Auto (use PA API country: %s)', 'asa1'),
+                                                    esc_html($this->_amazon_country_code ?: '—')
+                                                );
+                                            ?></option>
+                                            <?php foreach ($supportedLocales as $code): ?>
+                                                <option value="<?php echo esc_attr($code); ?>" <?php selected($configuredCountry, $code); ?>><?php echo esc_html($code); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <p class="description"><?php _e('Optional: Override the marketplace for Creators API requests. If left on Auto, the country code from PA API settings above is used. The frontend product link domain still follows the PA API country.', 'asa1'); ?></p>
                                     </td>
                                 </tr>
 
@@ -2591,11 +2699,11 @@ class AmazonSimpleAdmin {
                                     <?php _e('<strong>PA API Fallback:</strong> If PA API credentials are configured and Creators API fails or is disabled, ASA1 automatically falls back to PA API.', 'asa1'); ?>
                                 </li>
                                 <li>
-                                    <?php _e('<strong>API Version:</strong> The API version is automatically determined based on the marketplace region:', 'asa1'); ?>
+                                    <?php _e('<strong>Credential Version:</strong> v2.x credentials use Cognito, v3.x credentials (issued from February 2026) use Login with Amazon. Both are accepted by ASA1; choose the one Amazon issued for your account.', 'asa1'); ?>
                                     <ul style="margin-left: 20px; margin-top: 5px; margin-bottom: 5px;">
-                                        <li><?php _e('Version 2.1: Americas (US, CA, MX, BR)', 'asa1'); ?></li>
-                                        <li><?php _e('Version 2.2: Europe/MENA/India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)', 'asa1'); ?></li>
-                                        <li><?php _e('Version 2.3: Far East (JP, AU, SG)', 'asa1'); ?></li>
+                                        <li><?php _e('Version 2.1 / 3.1: Americas (US, CA, MX, BR)', 'asa1'); ?></li>
+                                        <li><?php _e('Version 2.2 / 3.2: Europe / MENA / India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)', 'asa1'); ?></li>
+                                        <li><?php _e('Version 2.3 / 3.3: Far East (JP, AU, SG)', 'asa1'); ?></li>
                                     </ul>
                                 </li>
                                 <li>
@@ -2609,6 +2717,8 @@ class AmazonSimpleAdmin {
                                 </li>
                             </ul>
                         </div>
+
+                        </div><!-- /.asa-api-section (Creators API) -->
 
 
                         <p class="submit">

@@ -4,7 +4,7 @@ Contributors: worschtebrot
 Requires at least: 5.1
 Requires PHP: 8.1
 Tested up to: 6.9.0
-Stable tag: 1.9.0
+Stable tag: 1.10.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,17 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.10.0 =
+* Added: Support for Amazon Creators API v3 credentials using LWA (Login with Amazon) authentication, including versions 3.1 (Americas), 3.2 (Europe / MENA / India) and 3.3 (Far East)
+* Added: Credential Version selector in the Creators API setup (Cognito v2.x and LWA v3.x)
+* Added: Locale-based fallback when no Credential Version is configured (preserves behavior for existing v2.x installations)
+* Added: Deprecation notice on the Setup page warning that Amazon PA API is expected to stop working on or around May 15, 2026
+* Added: Improved connection test error message that hints at a credential-version mismatch on HTTP 401/403
+* Added: Optional Marketplace override for Creators API (separate from PA API country code; falls back to PA API country when not set)
+* Added: Uninstall now removes all Creators API options
+* Changed: OAuth2 token exchange uses JSON body for LWA (v3.x) and form-encoded for Cognito (v2.x)
+* Info: v3 credentials are issued by Amazon to new associates from February 2026; existing v2 credentials continue to work
 
 = 1.9.0 =
 * Added: Support for Amazon Creators API as alternative data source

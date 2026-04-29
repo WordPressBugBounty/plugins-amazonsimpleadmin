@@ -1333,20 +1333,86 @@ msgid "<strong>PA API Fallback:</strong> If PA API credentials are configured an
 msgstr "<strong>PA API Fallback:</strong> Wenn PA API-Zugangsdaten konfiguriert sind und die Creators API fehlschlägt oder deaktiviert ist, wechselt ASA1 automatisch zur PA API."
 
 #: AsaCore.php:2581
-msgid "<strong>API Version:</strong> The API version is automatically determined based on the marketplace region:"
-msgstr "<strong>API-Version:</strong> Die API-Version wird automatisch basierend auf der Marktplatz-Region bestimmt:"
+msgid "<strong>Credential Version:</strong> v2.x credentials use Cognito, v3.x credentials (issued from February 2026) use Login with Amazon. Both are accepted by ASA1; choose the one Amazon issued for your account."
+msgstr "<strong>Credential-Version:</strong> v2.x-Zugangsdaten nutzen Cognito, v3.x-Zugangsdaten (ausgegeben ab Februar 2026) nutzen Login with Amazon. ASA1 unterstützt beide — wähle die Version, die Amazon dir ausgestellt hat."
 
 #: AsaCore.php:2583
-msgid "Version 2.1: Americas (US, CA, MX, BR)"
-msgstr "Version 2.1: Amerika (US, CA, MX, BR)"
+msgid "Version 2.1 / 3.1: Americas (US, CA, MX, BR)"
+msgstr "Version 2.1 / 3.1: Amerika (US, CA, MX, BR)"
 
 #: AsaCore.php:2584
-msgid "Version 2.2: Europe/MENA/India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
-msgstr "Version 2.2: Europa/MENA/Indien (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
+msgid "Version 2.2 / 3.2: Europe / MENA / India (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
+msgstr "Version 2.2 / 3.2: Europa / MENA / Indien (DE, UK, FR, IT, ES, NL, PL, SE, TR, BE, EG, SA, AE, IN)"
 
 #: AsaCore.php:2585
-msgid "Version 2.3: Far East (JP, AU, SG)"
-msgstr "Version 2.3: Fernost (JP, AU, SG)"
+msgid "Version 2.3 / 3.3: Far East (JP, AU, SG)"
+msgstr "Version 2.3 / 3.3: Fernost (JP, AU, SG)"
+
+msgid "Credential Version"
+msgstr "Credential-Version"
+
+msgid "Auto (locale default: %s)"
+msgstr "Automatisch (Standard für Locale: %s)"
+
+msgid "Cognito (v2.x)"
+msgstr "Cognito (v2.x)"
+
+msgid "LWA (v3.x)"
+msgstr "LWA (v3.x)"
+
+msgid "2.1 — Americas (US, CA, MX, BR)"
+msgstr "2.1 — Amerika (US, CA, MX, BR)"
+
+msgid "2.2 — Europe / MENA / India"
+msgstr "2.2 — Europa / MENA / Indien"
+
+msgid "2.3 — Far East (JP, AU, SG)"
+msgstr "2.3 — Fernost (JP, AU, SG)"
+
+msgid "3.1 — Americas (US, CA, MX, BR)"
+msgstr "3.1 — Amerika (US, CA, MX, BR)"
+
+msgid "3.2 — Europe / MENA / India"
+msgstr "3.2 — Europa / MENA / Indien"
+
+msgid "3.3 — Far East (JP, AU, SG)"
+msgstr "3.3 — Fernost (JP, AU, SG)"
+
+msgid "Choose the version that matches your Amazon Creators API credentials. v2.x credentials use Cognito; v3.x credentials (issued from February 2026) use LWA. The version is shown in your Amazon credentials confirmation email."
+msgstr "Wähle die Version, die zu deinen Amazon Creators API-Zugangsdaten passt. v2.x nutzt Cognito, v3.x (ausgegeben ab Februar 2026) nutzt LWA. Die Version steht in der Bestätigungs-E-Mail von Amazon."
+
+msgid "Amazon PA API is being deprecated"
+msgstr "Amazon PA API wird abgekündigt"
+
+msgid "<strong>Amazon has announced the deprecation of the Product Advertising API (PA API). The API is expected to stop working on or around May 15, 2026.</strong>"
+msgstr "<strong>Amazon hat die Abkündigung der Product Advertising API (PA API) angekündigt. Voraussichtlich wird die API ab dem 15. Mai 2026 nicht mehr funktionieren.</strong>"
+
+msgid "To keep your Amazon affiliate integrations working, switch to the <strong>Amazon Creators API</strong> as soon as possible. ASA1 already supports both Cognito (v2.x) and LWA (v3.x) credentials &mdash; configure them in the <em>Amazon Creators API</em> section below."
+msgstr "Damit deine Amazon-Affiliate-Integrationen weiter funktionieren, stelle so bald wie möglich auf die <strong>Amazon Creators API</strong> um. ASA1 unterstützt bereits Cognito- (v2.x) und LWA-Zugangsdaten (v3.x) &mdash; konfiguriere sie unten im Abschnitt <em>Amazon Creators API</em>."
+
+msgid "Learn how to register: %s."
+msgstr "So registrierst du dich: %s."
+
+msgid "Amazon Creators API onboarding"
+msgstr "Amazon Creators API Onboarding"
+
+msgid "Auto (use PA API country: %s)"
+msgstr "Automatisch (PA-API-Land verwenden: %s)"
+
+msgid "Optional: Override the marketplace for Creators API requests. If left on Auto, the country code from PA API settings above is used. The frontend product link domain still follows the PA API country."
+msgstr "Optional: Marktplatz für Creators-API-Anfragen überschreiben. Bei Automatisch wird der Ländercode aus den PA-API-Einstellungen oben genutzt. Die Domain der Produktlinks im Frontend folgt weiterhin dem PA-API-Land."
+
+msgid "Amazon Product Advertising API (PA API)"
+msgstr "Amazon Product Advertising API (PA API)"
+
+msgid "Deprecated"
+msgstr "Veraltet"
+
+msgid "The Amazon PA API is being shut down on or around May 15, 2026. Please configure the Creators API below as a replacement."
+msgstr "Die Amazon PA API wird voraussichtlich am 15. Mai 2026 abgeschaltet. Bitte konfiguriere unten die Creators API als Ersatz."
+
+msgid "Recommended"
+msgstr "Empfohlen"
 
 #: AsaCore.php:2591
 msgid "<strong>Get Credentials:</strong> Find the PartnerNet URL for your country in our %1$s, then check out the %2$s to learn how to register."
