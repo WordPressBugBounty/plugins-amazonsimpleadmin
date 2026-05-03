@@ -3,8 +3,8 @@ Tags: amazon, affiliate, monetize, commission, marketing
 Contributors: worschtebrot
 Requires at least: 5.1
 Requires PHP: 8.1
-Tested up to: 6.9.0
-Stable tag: 1.10.0
+Tested up to: 6.9.4
+Stable tag: 1.10.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.10.1 =
+* Fixed: Fatal error on the Test tab (mode "ratings") when the Amazon item could not be loaded due to invalid Creators API credentials, network errors or unknown ASIN. The Test page now shows a readable error message and points to the Log tab instead of crashing with "Call to a member function getAsin() on null".
 
 = 1.10.0 =
 * Added: Support for Amazon Creators API v3 credentials using LWA (Login with Amazon) authentication, including versions 3.1 (Americas), 3.2 (Europe / MENA / India) and 3.3 (Far East)

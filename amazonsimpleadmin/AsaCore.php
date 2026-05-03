@@ -9,7 +9,7 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.10.0';
+    const VERSION = '1.10.1';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
 
@@ -1715,6 +1715,13 @@ class AmazonSimpleAdmin {
                 echo esc_html_asa( $this->getItem($asin, $tpl) );
             } elseif ($mode == 'ratings') {
                 $item = $this->_getItem($asin);
+
+                if (!($item instanceof Asa_Service_Amazon_Item)) {
+                    echo '<p>' . __('Customer ratings could not be retrieved.', 'asa1') . '</p>';
+                    echo '<p>' . esc_html__('The Amazon item could not be loaded. Check the Log tab for the underlying API error (invalid credentials, network failure, or unknown ASIN).', 'asa1') . '</p>';
+                    return;
+                }
+
                 // get the customer rating object
                 $customerReviews = $this->getCustomerReviews($item, true);
 
