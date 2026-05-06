@@ -4,7 +4,7 @@ Contributors: worschtebrot
 Requires at least: 5.1
 Requires PHP: 8.1
 Tested up to: 6.9.4
-Stable tag: 1.10.1
+Stable tag: 1.10.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.10.2 =
+* Security: Hardened input validation and output escaping on the Log page.
 
 = 1.10.1 =
 * Fixed: Fatal error on the Test tab (mode "ratings") when the Amazon item could not be loaded due to invalid Creators API credentials, network errors or unknown ASIN. The Test page now shows a readable error message and points to the Log tab instead of crashing with "Call to a member function getAsin() on null".

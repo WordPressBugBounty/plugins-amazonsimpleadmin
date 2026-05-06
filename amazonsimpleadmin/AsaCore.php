@@ -9,7 +9,7 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.10.1';
+    const VERSION = '1.10.2';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
 

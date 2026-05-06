@@ -4,7 +4,7 @@
  *
  * @author    Timo Reith <timo@ifeelweb.de>
  * @copyright Copyright (c) 2014 ifeelweb.de
- * @version   $Id: AsaLogger.php 962984 2014-08-09 11:58:44Z worschtebrot $
+ * @version   $Id: AsaLogger.php 3524736 2026-05-06 19:13:37Z worschtebrot $
  * @package
  */
 
@@ -54,9 +54,14 @@ class AsaLogger
      */
     public function logError($error)
     {
-        $location = site_url($_SERVER['REQUEST_URI']);
+        $requestUri = isset($_SERVER['REQUEST_URI']) ? (string) $_SERVER['REQUEST_URI'] : '';
+        $location   = site_url($requestUri);
         if (strstr($location, 'admin-ajax.php') !== false) {
-            $location = $_SERVER['HTTP_REFERER'];
+            $referer = isset($_SERVER['HTTP_REFERER']) ? (string) $_SERVER['HTTP_REFERER'] : '';
+            // Referer is attacker-controlled and was previously stored unsanitised,
+            // enabling stored XSS once an admin viewed the log page. esc_url_raw()
+            // rejects unsafe schemes (javascript:, data:, ...) and strips control chars.
+            $location = esc_url_raw($referer);
         }
 
 

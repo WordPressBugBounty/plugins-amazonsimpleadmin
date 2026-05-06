@@ -100,25 +100,30 @@ class AsaLogListTable extends WP_List_Table
     {
         switch( $column_name ) {
             case 'id':
+                return (int) $item[ $column_name ];
+
             case 'message':
-            case 'location':
             case 'timestamp':
-                return $item[ $column_name ];
-                break;
+                return esc_html( (string) $item[ $column_name ] );
+
+            case 'location':
+                // Stored value originates from $_SERVER['HTTP_REFERER'] / REQUEST_URI
+                // and must never be rendered as raw HTML. Render as escaped URL only.
+                return esc_url( (string) $item[ $column_name ] );
 
             case 'type':
                 require_once 'AsaLogger.php';
                 $type = (int)$item[$column_name];
                 if ($type == AsaLogger::LOG_TYPE_ERROR) {
-                    return __('Error', 'asa1');
+                    return esc_html__('Error', 'asa1');
                 }
                 break;
 
             case 'extra':
-                return nl2br($item[$column_name]);
+                return nl2br( esc_html( (string) $item[ $column_name ] ) );
 
             default:
-                return print_r( $item, true ) ;
+                return esc_html( print_r( $item, true ) );
         }
     }
 
