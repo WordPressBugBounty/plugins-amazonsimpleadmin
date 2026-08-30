@@ -4,7 +4,7 @@
  *
  * @author    Timo Reith <timo@ifeelweb.de>
  * @copyright Copyright (c) 2014 ifeelweb.de
- * @version   $Id: AsaLogger.php 3524736 2026-05-06 19:13:37Z worschtebrot $
+ * @version   $Id: AsaLogger.php 3672432 2026-08-30 11:12:00Z worschtebrot $
  * @package
  */
 

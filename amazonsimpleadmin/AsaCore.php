@@ -9,7 +9,7 @@ class AmazonSimpleAdmin {
     const DB_COLL         = 'asa_collection';
     const DB_COLL_ITEM    = 'asa_collection_item';
 
-    const VERSION = '1.10.2';
+    const VERSION = '1.10.3';
 
     const CACHE_DEFAULT_LIFETIME = 7200;
 
@@ -4136,15 +4136,32 @@ class AmazonSimpleAdmin {
 
     public function doCommentShortcode($content)
     {
+        // Escape [ and ] inside HTML tags so the shortcode regex below cannot match a
+        // shortcode delimiter that starts inside an attribute value (e.g. title="[asa ...]")
+        // and closes outside the element. Without this, a crafted comment can make the
+        // regex splice shortcode output into the middle of an open HTML attribute, letting
+        // the browser reinterpret trailing comment text as new tag attributes (mutation XSS).
+        $content = preg_replace_callback(
+            '/<[^>]+>/s',
+            function ($m) {
+                return str_replace(['[', ']'], ['&#91;', '&#93;'], $m[0]);
+            },
+            $content
+        );
+
         $pattern = '/\[asa(?:\s+[^]]*)?\](.*?)\[\/asa\]/s';
 
-        return preg_replace_callback(
+        $result = preg_replace_callback(
             $pattern,
             function ($match) {
                 return do_shortcode('[asa' . (isset($match[1]) ? ']' . $match[1] . '[/asa]' : ']'));
             },
             $content
         );
+
+        // Defense in depth: strip any tags/attributes (including event handlers) that
+        // could still slip through, regardless of how they were constructed above.
+        return wp_kses_post($result);
     }
 
 }

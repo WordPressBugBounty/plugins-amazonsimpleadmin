@@ -3,8 +3,8 @@ Tags: amazon, affiliate, monetize, commission, marketing
 Contributors: worschtebrot
 Requires at least: 5.1
 Requires PHP: 8.1
-Tested up to: 6.9.4
-Stable tag: 1.10.2
+Tested up to: 7.1
+Stable tag: 1.10.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ Here you can find a detailed documentation:
 [www.wp-amazon-plugin.com/guide/](https://www.wp-amazon-plugin.com/guide/)
 
 == Change Log ==
+
+= 1.10.3 =
+* Security: Hardened parsing of [asa] shortcodes in user comments against malformed markup.
 
 = 1.10.2 =
 * Security: Hardened input validation and output escaping on the Log page.
